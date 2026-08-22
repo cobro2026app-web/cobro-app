@@ -1,0 +1,47 @@
+part of 'cliente_cubit.dart';
+
+class ClienteState extends Equatable {
+  final BuildContext context;
+  final Widget child;
+  final bool loading;
+  final bool btnEnabled;
+  final bool loadingBtn;
+  final List<DatumClEntity>? clientes;
+
+  const ClienteState({
+    required this.context,
+    this.loading = false,
+    this.btnEnabled = false,
+    this.loadingBtn = false,
+    this.child = const SizedBox(),
+    this.clientes,
+  });
+
+  @override
+  List<Object> get props => [
+    context,
+    loading,
+    btnEnabled,
+    child,
+    clientes ?? [],
+    loadingBtn,
+  ];
+
+  ClienteState copyWith({
+    BuildContext? context,
+    bool? loading,
+    bool? loadingBtn,
+    bool? btnEnabled,
+    Widget? child,
+    List<DatumClEntity>? clientes,
+  }) {
+    return ClienteState(
+      context: context ?? this.context,
+      loading: loading ?? this.loading,
+      btnEnabled: btnEnabled ?? this.btnEnabled,
+      child: child ?? this.child,
+      clientes: clientes ?? this.clientes,
+      loadingBtn: loadingBtn ?? this.loadingBtn,
+    );
+  }
+}

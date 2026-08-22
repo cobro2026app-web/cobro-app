@@ -1,0 +1,26 @@
+import 'package:dio/dio.dart';
+import 'package:personal/src/common/error/exceptions.dart';
+import 'package:personal/src/common/network/api_client.dart';
+import 'package:personal/src/domain/dto/crear_prestamo_dto.dart';
+
+abstract class PrestamoService {
+  Future<dynamic> crear({required CrearPrestamoDto dto});
+}
+
+class PrestamoServiceImpl implements PrestamoService {
+  final ApiClient apiClient;
+
+  PrestamoServiceImpl({required this.apiClient});
+
+  @override
+  Future<dynamic> crear({required CrearPrestamoDto dto}) async {
+    try {
+      final response = await apiClient.dio.post('/prestamo', data: dto.toJson());
+      return true;
+    } on DioException catch (e) {
+      throw ServerExceptions(message: e.response!.data["message"]);
+    } catch (e) {
+      throw Exception("Error inesperado");
+    }
+  }
+}
