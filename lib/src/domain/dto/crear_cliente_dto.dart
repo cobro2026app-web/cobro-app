@@ -5,6 +5,7 @@ class CrearClienteDto {
   final String telefono;
   final String whatsapp;
   final String direccion;
+  final String rutaId;
   final String descripcionDireccion;
 
   CrearClienteDto({
@@ -15,6 +16,7 @@ class CrearClienteDto {
     required this.whatsapp,
     required this.direccion,
     required this.descripcionDireccion,
+    required this.rutaId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -25,5 +27,6 @@ class CrearClienteDto {
     "whatsapp": whatsapp,
     "direccion": direccion,
     "descripcionDireccion": descripcionDireccion,
+    "rutaId": rutaId,
   };
 }

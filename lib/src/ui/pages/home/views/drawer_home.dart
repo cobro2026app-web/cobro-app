@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/ui/pages/config/config_page.dart';
+import 'package:personal/src/ui/pages/rutas/ruta_page.dart';
 
 class DrawerHome extends StatelessWidget {
   const DrawerHome({super.key});
@@ -45,12 +46,12 @@ class DrawerHome extends StatelessWidget {
                     onTap: () {
                       Navigator.pop(context);
 
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (_) => const RutasView(),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const RutaPage(),
+                        ),
+                      );
                     },
                   ),
 

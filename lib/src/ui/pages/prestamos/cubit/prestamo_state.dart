@@ -3,15 +3,16 @@ part of 'prestamo_cubit.dart';
 class PrestamoState extends Equatable {
   final BuildContext context;
   final Widget child;
-  final bool listClientes;
   final DatumClEntity? cliente;
   final SCobroEntity? periodoSeleccionado;
   final DateTime? fechaInicial;
   final DateTime? fechaFinal;
-  final List<DateTime>? fechasPago;
+  final bool listClientes;
   final bool loading;
   final bool isPrevious;
   final bool loadingBtn;
+  final List<DateTime>? fechasPago;
+  final List<DatumPEntity>? prestamos;
   const PrestamoState({
     required this.context,
     this.child = const SizedBox(),
@@ -24,6 +25,7 @@ class PrestamoState extends Equatable {
     this.loading = false,
     this.isPrevious = false,
     this.loadingBtn = false,
+    this.prestamos
   });
 
   @override
@@ -39,6 +41,7 @@ class PrestamoState extends Equatable {
     loading,
     isPrevious,
     loadingBtn,
+     prestamos
   ];
   PrestamoState copyWith({
     BuildContext? context,
@@ -52,6 +55,7 @@ class PrestamoState extends Equatable {
     bool? loading,
     bool? isPrevious,
     bool? loadingBtn,
+     List<DatumPEntity>? prestamos,
   }) => PrestamoState(
     context: context ?? this.context,
     listClientes: listClientes ?? this.listClientes,
@@ -64,5 +68,6 @@ class PrestamoState extends Equatable {
     loading: loading ?? this.loading,
     isPrevious: isPrevious ?? this.isPrevious,
     loadingBtn: loadingBtn ?? this.loadingBtn,
+    prestamos: prestamos ?? this.prestamos
   );
 }

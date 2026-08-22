@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:personal/get_it.dart';
+import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
 import 'package:personal/src/domain/dto/crear_cobrador_dto.dart';
 import 'package:personal/src/domain/entities/cobrador_entity.dart';
@@ -73,6 +74,7 @@ class CobradorCubit extends Cubit<CobradorState> {
       },
       (r) {
         emit(state.copyWith(cobradores: r.data));
+        Shared.setCobradores = r.data;
       },
     );
 

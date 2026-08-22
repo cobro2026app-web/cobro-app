@@ -1,21 +1,20 @@
 import 'package:dartz/dartz.dart';
 import 'package:personal/src/common/error/exceptions.dart';
 import 'package:personal/src/common/error/failures.dart';
-import 'package:personal/src/data/services/prestamo_service.dart';
-import 'package:personal/src/domain/dto/crear_prestamo_dto.dart';
-import 'package:personal/src/domain/entities/prestamo_entity.dart';
-import 'package:personal/src/domain/repository/presamo_repo.dart';
+import 'package:personal/src/data/services/ruta_service.dart';
+import 'package:personal/src/domain/dto/ruta_dto.dart';
+import 'package:personal/src/domain/entities/ruta_entity.dart';
+import 'package:personal/src/domain/repository/ruta_repo.dart';
 
-class PrestamoRepoImpl implements PresamoRepo {
-  final PrestamoService prestamoService;
+class RutaRepoImpl implements RutaRepo {
 
-  PrestamoRepoImpl({required this.prestamoService});
+final RutaService rutaService;
+
+  RutaRepoImpl({required this.rutaService});
   @override
-  Future<Either<Failure, dynamic>> crear({
-    required CrearPrestamoDto dto,
-  }) async {
-    try {
-      final response = await prestamoService.crear(dto: dto);
+  Future<Either<Failure, dynamic>> crear({required RutaDto dto}) async{
+   try {
+      final response = await rutaService.crear(dto:dto);
 
       return Right(response);
     } on ServerExceptions catch (e) {
@@ -28,9 +27,9 @@ class PrestamoRepoImpl implements PresamoRepo {
   }
 
   @override
-  Future<Either<Failure, PrestamoEntity>> listar() async {
-    try {
-      final response = await prestamoService.listar();
+  Future<Either<Failure, RutasEntity>> listar() async{
+ try {
+      final response = await rutaService.listar();
 
       return Right(response);
     } on ServerExceptions catch (e) {

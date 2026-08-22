@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/theme/theme.dart';
+import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_home.dart';
 import 'package:personal/src/ui/widgets/widgets.dart';
@@ -162,6 +164,51 @@ class CreateClientView extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 28),
+                const SizedBox(height: 16),
+
+                DropdownButtonFormField<DatumREntity>(
+                  initialValue: state.ruta,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Ruta',
+                    hintText: 'Seleccione una ruta',
+                    prefixIcon: const Icon(Icons.route_outlined),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Colors.grey.withValues(alpha: .15),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: AppTheme.primaryColor,
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                  items: Shared.getRutas!.map((ruta) {
+                    return DropdownMenuItem<DatumREntity>(
+                      value: ruta,
+                      child: Text(ruta.nombre, overflow: TextOverflow.ellipsis),
+                    );
+                  }).toList(),
+                  onChanged: state.loadingBtn
+                      ? null
+                      : (value) {
+                          if (value != null) {
+                            c.onEventRuta(value);
+                            c.enabledBtn();
+                          }
+                        },
+                ),
+                const SizedBox(height: 28),
 
                 _sectionTitle(
                   icon: Icons.notes_rounded,
@@ -187,6 +234,7 @@ class CreateClientView extends StatelessWidget {
                   height: 54,
                   child: BtnWidget.btn(
                     text: 'Crear cliente',
+                    loading: state.loadingBtn,
                     icon: Icons.person_add_alt_1_rounded,
                     onPressed: state.btnEnabled
                         ? () {

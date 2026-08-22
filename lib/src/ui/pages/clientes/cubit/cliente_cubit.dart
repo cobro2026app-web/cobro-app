@@ -5,10 +5,13 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/get_it.dart';
+import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
 import 'package:personal/src/domain/dto/crear_cliente_dto.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
+import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/domain/repository/cliente_repo.dart';
+import 'package:personal/src/domain/repository/ruta_repo.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_home.dart';
 import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
 
@@ -20,6 +23,7 @@ class ClienteCubit extends Cubit<ClienteState> {
   ///
 
   final _clienteRepo = sl<ClienteRepository>();
+  final _rutaRepo= sl<RutaRepo>();
 
   ///Constructor
   ///
@@ -28,6 +32,7 @@ class ClienteCubit extends Cubit<ClienteState> {
   ClienteCubit(BuildContext context) : super(ClienteState(context: context)) {
     setChild(ClientHome());
     listClientes();
+    listarRuta();
   }
 
   ///Variables
@@ -50,6 +55,10 @@ class ClienteCubit extends Cubit<ClienteState> {
     emit(state.copyWith(child: child));
   }
 
+  void onEventRuta(DatumREntity r) {
+    emit(state.copyWith(ruta: r));
+  }
+
   ///Validaciones
   ///
   ///
@@ -63,8 +72,8 @@ class ClienteCubit extends Cubit<ClienteState> {
       directionTxt,
       barrioTxt,
     ].every((text) => text.text.trim().isNotEmpty);
-log("$checkEnabled");
-    emit(state.copyWith(btnEnabled: checkEnabled));
+    log("$checkEnabled");
+    emit(state.copyWith(btnEnabled: checkEnabled && state.ruta != null));
   }
 
   ///Peticiones
@@ -90,6 +99,7 @@ log("$checkEnabled");
     emit(state.copyWith(loadingBtn: true));
     final r = await _clienteRepo.crear(
       dto: CrearClienteDto(
+        rutaId: state.ruta!.id,
         nombres: nameTxt.text.trim(),
         apellidos: lastNameTxt.text.trim(),
         cedula: ideTxt.text.trim(),
@@ -113,6 +123,15 @@ log("$checkEnabled");
       },
     );
     emit(state.copyWith(loadingBtn: false));
+  }
+
+  void listarRuta()async{
+    if(Shared.getRutas==null){
+      final r = await _rutaRepo.listar();
+      r.fold((l){}, (r){
+        Shared.setRutas = r.data;
+      });
+    }
   }
 
   ///Navegacion

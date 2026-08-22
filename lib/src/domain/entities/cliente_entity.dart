@@ -9,6 +9,7 @@ class ClienteEntity {
 class DatumClEntity {
   final String id;
   final String nombres;
+  final String rutaId;
   final String apellidos;
   final String cedula;
   final String telefono;
@@ -20,6 +21,7 @@ class DatumClEntity {
   DatumClEntity({
     required this.id,
     required this.nombres,
+    required this.rutaId,
     required this.apellidos,
     required this.cedula,
     required this.telefono,

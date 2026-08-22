@@ -5,22 +5,24 @@ import 'package:personal/src/data/repository/auth_repo_impl.dart';
 import 'package:personal/src/data/repository/cear_cliente_repo.dart';
 import 'package:personal/src/data/repository/config_repo_impl.dart';
 import 'package:personal/src/data/repository/prestamo_repo_impl.dart';
+import 'package:personal/src/data/repository/ruta_repo_impl.dart';
 import 'package:personal/src/data/repository/usuario_repo_impl.dart';
 import 'package:personal/src/data/services/auth_service.dart';
 import 'package:personal/src/data/services/cliente_service.dart';
 import 'package:personal/src/data/services/config_service.dart';
 import 'package:personal/src/data/services/prestamo_service.dart';
+import 'package:personal/src/data/services/ruta_service.dart';
 import 'package:personal/src/data/services/usuario_service.dart';
 import 'package:personal/src/domain/repository/auth_repo.dart';
 import 'package:personal/src/domain/repository/cliente_repo.dart';
 import 'package:personal/src/domain/repository/config_repo.dart';
 import 'package:personal/src/domain/repository/presamo_repo.dart';
+import 'package:personal/src/domain/repository/ruta_repo.dart';
 import 'package:personal/src/domain/repository/usuario_repo.dart';
 
 final sl = GetIt.instance;
 
 void initDep() {
-
   // Preferencias
   sl.registerLazySingleton<SecureStorageUtil>(() => SecureStorageUtil());
   // Dio
@@ -74,5 +76,8 @@ void initDep() {
     () => PrestamoServiceImpl(apiClient: sl()),
   );
 
+  //Rutas
+  sl.registerLazySingleton<RutaRepo>(() => RutaRepoImpl(rutaService: sl()));
 
+  sl.registerLazySingleton<RutaService>(() => RutaServiceImpl(apiClient: sl()));
 }

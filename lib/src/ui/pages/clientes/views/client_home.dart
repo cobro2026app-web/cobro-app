@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_card_view.dart';
 import 'package:personal/src/ui/pages/clientes/views/filter_client_view.dart';
@@ -51,7 +52,7 @@ class ClientHome extends StatelessWidget {
                             '${c.nombres.substring(0, 1).toUpperCase()}${c.apellidos.substring(0, 1).toUpperCase()}',
                         name: c.nombres,
                         document: 'CC ${c.cedula}',
-                        route: 'Ruta Norte',
+                        route:  c.rutaId.isEmpty?"Sin asignación":Shared.getRutas!.firstWhere((e)=>e.id==c.rutaId).nombre,
                         phone: c.telefono,
                         balance: '\$1.200.000',
                         active: true,

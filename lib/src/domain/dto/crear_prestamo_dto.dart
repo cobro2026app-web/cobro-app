@@ -1,7 +1,7 @@
 import 'package:personal/src/domain/dto/prestamo_fecha_dto.dart';
 
 class CrearPrestamoDto {
-  final String usuarioId;
+  final String clienteId;
   final int monto;
   final int interes;
   final int numeroCuotas;
@@ -13,7 +13,7 @@ class CrearPrestamoDto {
   final List<PrestamoFechaDto>? fechas;
 
   CrearPrestamoDto({
-    required this.usuarioId,
+    required this.clienteId,
     required this.monto,
     required this.interes,
     required this.numeroCuotas,
@@ -27,7 +27,7 @@ class CrearPrestamoDto {
 
   Map<String, dynamic> toJson() {
     return {
-      'usuarioId': usuarioId,
+      'clienteId': clienteId,
       'monto': monto,
       'interes': interes,
       'numeroCuotas': numeroCuotas,

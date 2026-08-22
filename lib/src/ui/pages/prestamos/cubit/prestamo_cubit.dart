@@ -12,6 +12,7 @@ import 'package:personal/src/domain/dto/cuota_esperada_dto.dart';
 import 'package:personal/src/domain/dto/prestamo_fecha_dto.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/domain/entities/config_entity.dart';
+import 'package:personal/src/domain/entities/prestamo_entity.dart';
 import 'package:personal/src/domain/repository/cliente_repo.dart';
 import 'package:personal/src/domain/repository/config_repo.dart';
 import 'package:personal/src/domain/repository/presamo_repo.dart';
@@ -37,6 +38,7 @@ class PrestamoCubit extends Cubit<PrestamoState> {
     onGetFechaInicial(DateTime.now());
     listarClientes();
     listarConfig();
+    listarPrestamo();
   }
 
   ///Variables
@@ -109,7 +111,8 @@ class PrestamoCubit extends Cubit<PrestamoState> {
     emit(state.copyWith(loadingBtn: true));
 
     final interes =
-        (int.parse(montoController.text) *(int.parse(interesController.text)/100))
+        (int.parse(montoController.text) *
+                (int.parse(interesController.text) / 100))
             .toInt();
     final cuota =
         ((int.parse(montoController.text) + interes) /
@@ -117,7 +120,7 @@ class PrestamoCubit extends Cubit<PrestamoState> {
             .toInt();
     final r = await _prestamosRepo.crear(
       dto: CrearPrestamoDto(
-        usuarioId: state.cliente!.id,
+        clienteId: state.cliente!.id,
         monto: int.parse(montoController.text),
         interes: int.parse(interesController.text),
         numeroCuotas: state.periodoSeleccionado!.cuotas!,
@@ -152,9 +155,29 @@ class PrestamoCubit extends Cubit<PrestamoState> {
           state.context,
           message: "Prestamo creado con éxito.",
         );
+        state.context.read<HomeCubit>().onCurrenteIndex(2);
+        state.context.read<HomeCubit>().onCurrenteIndex(3);
+        onGetChild(PrestamosHome());
+        listarPrestamo();
+        emit(state.copyWith(cliente: null, periodoSeleccionado: null));
+        montoController.clear();
       },
     );
     emit(state.copyWith(loadingBtn: false));
+  }
+
+  void listarPrestamo() async {
+    emit(state.copyWith(loading: true));
+    final r = await _prestamosRepo.listar();
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        emit(state.copyWith(prestamos: r.data));
+      },
+    );
+    emit(state.copyWith(loading: false));
   }
 
   ///Navegacion
