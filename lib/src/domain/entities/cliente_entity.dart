@@ -17,6 +17,7 @@ class DatumClEntity {
   final String direccion;
   final String descripcionDireccion;
   final String estado;
+  final int totalPrestado;
 
   DatumClEntity({
     required this.id,
@@ -29,5 +30,6 @@ class DatumClEntity {
     required this.direccion,
     required this.descripcionDireccion,
     required this.estado,
+    required this.totalPrestado
   });
 }

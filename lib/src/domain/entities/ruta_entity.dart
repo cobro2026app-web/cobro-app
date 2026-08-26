@@ -1,3 +1,5 @@
+import 'package:personal/src/domain/entities/cobrador_entity.dart';
+
 class RutasEntity {
     final bool exito;
     final String msg;
@@ -16,7 +18,7 @@ class DatumREntity {
     final String nombre;
     final String descripcion;
     final bool habilitada;
-    final dynamic cobrador;
+    final DatumCEntity? cobrador;
     final int cantidadClientes;
     final DateTime createdAt;
     final DateTime updatedAt;

@@ -424,9 +424,6 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 
-  // ============================================================
-  // PERIODOS
-  // ============================================================
 
   Widget _periodCard(SCobroEntity periodo) {
     return Container(
@@ -524,29 +521,8 @@ class _ConfigPageState extends State<ConfigPage> {
     );
   }
 
-  // ============================================================
-  // GUARDAR
-  // ============================================================
 
-  void _saveConfiguration() {
-    final configuracion = {
-      'diasCobro': [],
-      'interesPrestamo': 0,
-      'interesSeguro': 0,
-      'periodos': [],
-    };
-
-    debugPrint(configuracion.toString());
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Configuración guardada correctamente')),
-    );
-  }
 }
-
-// ============================================================
-// MODELO
-// ============================================================
 
 class PeriodoCobro {
   String nombre;

@@ -14,9 +14,9 @@ set setCode(String? code) {
 
 String _codeError = "";
 
-get getMessage => _message;
-get getCode => _code;
-get getCodeError => _codeError;
-get sentCode => _sendcode;
+String get getMessage => _message;
+String get getCode => _code;
+String get getCodeError => _codeError;
+bool get sentCode => _sendcode;
 StreamController<bool> codeSent = StreamController.broadcast();
 Stream<bool> get getcodeSent => codeSent.stream;

@@ -25,20 +25,25 @@ class PrestamosHome extends StatelessWidget {
 
                   const SizedBox(height: 18),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${state.prestamos!.length} préstamos registrados',
-                          style: TextStyle(
-                            color: Color(0xFF929BAB),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                  Visibility(
+                    visible: state.loading,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            state.prestamos == null
+                                ? ""
+                                : '${state.prestamos!.length} préstamos registrados',
+                            style: TextStyle(
+                              color: Color(0xFF929BAB),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                      FilterButton(),
-                    ],
+                        FilterButton(),
+                      ],
+                    ),
                   ),
 
                   ...state.prestamos!.map(

@@ -1,8 +1,3 @@
-// To parse this JSON data, do
-//
-//     final ConfigModel = ConfigModelFromJson(jsonString);
-
-import 'dart:convert';
 
 import 'package:personal/src/domain/entities/config_entity.dart';
 

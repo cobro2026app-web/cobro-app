@@ -1,6 +1,4 @@
 import 'package:personal/src/data/model/cliente_model.dart';
-import 'package:personal/src/domain/entities/auth_entity.dart';
-import 'package:personal/src/domain/entities/cliente_entity.dart';
 
 class PrestamoEntity {
   final bool exito;

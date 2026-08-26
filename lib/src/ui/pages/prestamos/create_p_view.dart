@@ -228,9 +228,6 @@ class _CrearPrestamoViewState extends State<CrearPrestamoView> {
     );
   }
 
-  void _createLoan(BuildContext context) {
-    // TODO: implementar
-  }
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -404,9 +401,10 @@ class _FrequencyDropdownState extends State<_FrequencyDropdown> {
             Icons.keyboard_arrow_down_rounded,
             color: Color(0xFF687386),
           ),
-          items: (Shared.getConfig?.periodosCobro ?? [])
-              .map((e) => DropdownMenuItem(value: e, child: Text(e.nombre)))
-              .toList(),
+          items:
+              (Shared.getConfig?.periodosCobro.where((e) => e.habilitado) ?? [])
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e.nombre)))
+                  .toList(),
           onChanged: (value) {
             if (value == null) return;
             widget.cubit.onGetPeriodo(value);

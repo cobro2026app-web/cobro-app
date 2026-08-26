@@ -19,12 +19,14 @@ class _RutaPageState extends State<RutaPage> {
       child: SafeArea(
         child: BlocBuilder<RutaCubit, RutaState>(
           builder: (context, state) {
+            final c = context.read<RutaCubit>();
             return Scaffold(
               backgroundColor: const Color(0xFFF5F7FC),
 
               floatingActionButton: FloatingActionButton.extended(
                 onPressed: () {
-                  context.read<RutaCubit>().onEventChild(CrearRutaView());
+                  c.clear();
+                  c.onEventChild(CrearRutaView());
                 },
                 backgroundColor: AppTheme.primaryColor,
                 foregroundColor: Colors.white,

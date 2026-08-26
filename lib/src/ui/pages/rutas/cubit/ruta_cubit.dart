@@ -6,6 +6,7 @@ import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
 import 'package:personal/src/domain/dto/ruta_dto.dart';
 import 'package:personal/src/domain/entities/cobrador_entity.dart';
+import 'package:personal/src/domain/entities/detalle_ruta_entity.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/domain/repository/ruta_repo.dart';
 import 'package:personal/src/domain/repository/usuario_repo.dart';
@@ -14,8 +15,15 @@ import 'package:personal/src/ui/pages/rutas/views/ruta_home.dart';
 part 'ruta_state.dart';
 
 class RutaCubit extends Cubit<RutaState> {
+  ///Repositorios
+  ///
+
   final _cobradorRepo = sl<UsuarioRepository>();
   final _rutaRepo = sl<RutaRepo>();
+
+  ///Constructor
+  ///
+  ///
   RutaCubit({required BuildContext context})
     : super(RutaState(context: context)) {
     onEventChild(RutaHome());
@@ -23,8 +31,14 @@ class RutaCubit extends Cubit<RutaState> {
     listarRutas();
   }
 
+  ///Variables
+  ///
+
   final nombreRuta = TextEditingController();
   final descripcionRuta = TextEditingController();
+
+  ///Eventos
+  ///
 
   void onEventChild(Widget child) {
     emit(state.copyWith(child: child));
@@ -44,6 +58,9 @@ class RutaCubit extends Cubit<RutaState> {
     emit(state.copyWith(enabled: e));
   }
 
+  ///Peticiones
+  ///
+  ///
   void listarRutas() async {
     emit(state.copyWith(loading: true));
     final r = await _rutaRepo.listar();
@@ -89,5 +106,55 @@ class RutaCubit extends Cubit<RutaState> {
       },
     );
     emit(state.copyWith(loadingBtn: false));
+  }
+
+  void detalleRuta(String idRuta) async {
+    emit(state.copyWith(loading: true));
+    final r = await _rutaRepo.detalleRuta(idRuta: idRuta);
+    r.fold((r) {}, (r) {
+      emit(state.copyWith(clientes: r));
+    });
+    emit(state.copyWith(loading: false));
+  }
+
+  void editarRuta(String id) async {
+    emit(state.copyWith(loadingBtn: true));
+    final r = await _rutaRepo.editar(
+      id: id,
+      dto: RutaDto(
+        cobradorId: state.cobrador!.id,
+        descripcion: descripcionRuta.text,
+        nombre: nombreRuta.text,
+      ),
+    );
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        AppDialogUtil.success(
+          state.context,
+          message: "Actualización realizada con éxito",
+        );
+        listarRutas();
+        onEventChild(RutaHome());
+      },
+    );
+    emit(state.copyWith(loadingBtn: false));
+  }
+
+  ///Otros
+  void llenarForm(DatumREntity ruta) {
+    nombreRuta.value = nombreRuta.value.copyWith(text: ruta.nombre);
+    descripcionRuta.value = descripcionRuta.value.copyWith(
+      text: ruta.descripcion,
+    );
+    emit(state.copyWith(cobrador: ruta.cobrador));
+  }
+
+  void clear() {
+    nombreRuta.clear();
+    descripcionRuta.clear();
+    emit(state.copyWith(limpiarCobrador: true));
   }
 }

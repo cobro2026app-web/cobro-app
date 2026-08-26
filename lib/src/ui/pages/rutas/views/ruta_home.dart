@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/common/theme/theme.dart';
-import 'package:personal/src/data/model/ruta_model.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/ui/pages/rutas/cubit/ruta_cubit.dart';
 import 'package:personal/src/ui/pages/rutas/views/crear_ruta_view.dart';
+import 'package:personal/src/ui/pages/rutas/views/ruta_detalle_view.dart';
 
 class RutaHome extends StatefulWidget {
   const RutaHome({super.key});
@@ -245,7 +245,9 @@ class _RutaHomeState extends State<RutaHome> {
                 child: _info(
                   icon: Icons.person_outline_rounded,
                   title: 'Cobrador',
-                  value: ruta.cobrador==null?"Sin asignación": ruta.cobrador,
+                  value: ruta.cobrador == null
+                      ? "Sin asignación"
+                      : ruta.cobrador!.nombre,
                 ),
               ),
 
@@ -263,56 +265,51 @@ class _RutaHomeState extends State<RutaHome> {
                 ),
               ),
 
-              PopupMenuButton<String>(
-                icon: const Icon(
-                  Icons.more_vert_rounded,
-                  color: Color(0xFF929BAB),
-                ),
-                onSelected: (value) {
-                  _handleMenu(value, ruta);
+              BlocBuilder<RutaCubit, RutaState>(
+                builder: (context, state) {
+                  final c = context.read<RutaCubit>();
+                  return PopupMenuButton<String>(
+                    icon: const Icon(
+                      Icons.more_vert_rounded,
+                      color: Color(0xFF929BAB),
+                    ),
+                    onSelected: (value) {
+                      _handleMenu(value, ruta);
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'ver',
+                        onTap: () {
+                          c.detalleRuta(ruta.id);
+                          c.onEventChild(RutaDetalleView(ruta: ruta));
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.visibility_outlined, size: 18),
+                            SizedBox(width: 10),
+                            Text('Ver ruta'),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        onTap: () {
+                          c.llenarForm(ruta);
+                          c.onEventChild(
+                            CrearRutaView(isEdit: true, idRuta: ruta.id),
+                          );
+                        },
+                        value: 'editar',
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit_outlined, size: 18),
+                            SizedBox(width: 10),
+                            Text('Editar'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
                 },
-                itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'ver',
-                    child: Row(
-                      children: [
-                        Icon(Icons.visibility_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Ver ruta'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'editar',
-                    child: Row(
-                      children: [
-                        Icon(Icons.edit_outlined, size: 18),
-                        SizedBox(width: 10),
-                        Text('Editar'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'cobrador',
-                    child: Row(
-                      children: [
-                        Icon(Icons.person_outline, size: 18),
-                        SizedBox(width: 10),
-                        Text('Asignar cobrador'),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'estado',
-                    child: Row(
-                      children: [
-                        Icon(Icons.power_settings_new, size: 18),
-                        SizedBox(width: 10),
-                        Text('Cambiar estado'),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -477,15 +474,6 @@ class _RutaHomeState extends State<RutaHome> {
   // ============================================================
   // ACCIONES
   // ============================================================
-
-  void _crearRuta() {
-    // showModalBottomSheet(
-    //   context: context,
-    //   isScrollControlled: true,
-    //   backgroundColor: Colors.transparent,
-    //   builder: (_) {},
-    // );
-  }
 
   void _handleMenu(String value, DatumREntity ruta) {
     switch (value) {

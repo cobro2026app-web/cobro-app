@@ -24,6 +24,7 @@ class DatumClModel extends DatumClEntity {
     required super.direccion,
     required super.descripcionDireccion,
     required super.estado,
+    required super.totalPrestado,
   });
 
   factory DatumClModel.fromJson(Map<String, dynamic> json) => DatumClModel(
@@ -37,5 +38,6 @@ class DatumClModel extends DatumClEntity {
     direccion: json["direccion"] ??"",
     descripcionDireccion: json["descripcionDireccion"] ??"", 
     estado: json["estado"] ??"",
+    totalPrestado: json["totalPrestado"] ??0,
   );
 }

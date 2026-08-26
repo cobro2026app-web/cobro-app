@@ -1,3 +1,4 @@
+import 'package:personal/src/data/model/cobrador_model.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
 
 class RutaModel extends RutasEntity {
@@ -18,7 +19,7 @@ class DatumRModel extends DatumREntity {
     required super.nombre,
     required super.descripcion,
     required super.habilitada,
-    required super.cobrador,
+     super.cobrador,
     required super.cantidadClientes,
     required super.createdAt,
     required super.updatedAt,
@@ -29,7 +30,7 @@ class DatumRModel extends DatumREntity {
     nombre: json["nombre"],
     descripcion: json["descripcion"],
     habilitada: json["habilitada"],
-    cobrador: json["cobrador"],
+    cobrador: DatumCModel.fromJson(json["cobrador"]),
     cantidadClientes: json["cantidadClientes"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),

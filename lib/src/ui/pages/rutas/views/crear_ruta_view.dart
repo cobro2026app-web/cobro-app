@@ -9,7 +9,9 @@ import 'package:personal/src/ui/pages/rutas/views/ruta_home.dart';
 import 'package:personal/src/ui/widgets/btn_widget.dart';
 
 class CrearRutaView extends StatelessWidget {
-  const CrearRutaView({super.key});
+  final bool isEdit;
+  final String? idRuta;
+  const CrearRutaView({super.key, this.isEdit = false, this.idRuta});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,10 @@ class CrearRutaView extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: AppTheme.primaryColor,
-            title: Text("Crear ruta", style: TextStyle(color: Colors.white)),
+            title: Text(
+              isEdit ? "Editar Ruta" : "Crear ruta",
+              style: TextStyle(color: Colors.white),
+            ),
             leading: IconButton(
               onPressed: () {
                 context.read<RutaCubit>().onEventChild(RutaHome());
@@ -103,11 +108,15 @@ class CrearRutaView extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 BtnWidget.btn(
-                  text: "Crear ruta",
+                  text: isEdit ? "Editar ruta" : "Crear ruta",
                   enabled: state.enabled,
                   loading: state.loadingBtn,
                   onPressed: () {
-                    context.read<RutaCubit>().crearRuta();
+                    if (isEdit) {
+                      c.editarRuta(idRuta!);
+                    } else {
+                      c.crearRuta();
+                    }
                   },
                 ),
               ],

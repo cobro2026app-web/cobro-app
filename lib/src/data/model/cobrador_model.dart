@@ -32,13 +32,13 @@ class DatumCModel extends DatumCEntity {
   });
 
   factory DatumCModel.fromJson(Map<String, dynamic> json) => DatumCModel(
-    id: json["id"],
-    nombre: json["nombre"],
-    apellido: json["apellido"],
-    documento: json["documento"],
-    telefono: json["telefono"],
-    email: json["email"] ??"",
-    estado: json["estado"],
+    id: json["id"] ?? "",
+    nombre: json["nombre"] ?? "",
+    apellido: json["apellido"] ?? "",
+    documento: json["documento"] ?? "",
+    telefono: json["telefono"] ?? "",
+    email: json["email"] ?? "",
+    estado: json["estado"] ?? "",
   );
 
   Map<String, dynamic> toJson() => {

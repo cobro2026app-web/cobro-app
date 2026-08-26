@@ -1,6 +1,5 @@
 
 
-import 'package:personal/src/data/model/auth_model.dart';
 import 'package:personal/src/data/model/cliente_model.dart';
 import 'package:personal/src/domain/entities/prestamo_entity.dart';
 

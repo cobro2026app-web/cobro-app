@@ -52,9 +52,13 @@ class ClientHome extends StatelessWidget {
                             '${c.nombres.substring(0, 1).toUpperCase()}${c.apellidos.substring(0, 1).toUpperCase()}',
                         name: c.nombres,
                         document: 'CC ${c.cedula}',
-                        route:  c.rutaId.isEmpty?"Sin asignación":Shared.getRutas!.firstWhere((e)=>e.id==c.rutaId).nombre,
+                        route: c.rutaId.isEmpty
+                            ? "Sin asignación"
+                            : Shared.getRutas!
+                                  .firstWhere((e) => e.id == c.rutaId)
+                                  .nombre,
                         phone: c.telefono,
-                        balance: '\$1.200.000',
+                        balance: '\$${c.totalPrestado}',
                         active: true,
                       ),
                     ),
