@@ -2,13 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 
-class Clientepage extends StatelessWidget {
+class Clientepage extends StatefulWidget {
   const Clientepage({super.key});
+
+  @override
+  State<Clientepage> createState() => _ClientepageState();
+}
+
+class _ClientepageState extends State<Clientepage> {
+
+late ClienteCubit _clienteCubit;
+
+@override
+  void initState() {
+    super.initState();
+    _clienteCubit = ClienteCubit(context);
+    _clienteCubit.listClientes();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ClienteCubit(context),
+      create: (context) =>_clienteCubit,
       child: BlocBuilder<ClienteCubit, ClienteState>(
         builder: (context, state) {
           return SafeArea(

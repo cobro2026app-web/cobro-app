@@ -7,4 +7,5 @@ abstract class ClienteRepository {
   Future<Either<Failure, ClienteEntity>> listar();
 
   Future<Either<Failure, dynamic>> crear({required CrearClienteDto dto});
+  Future<Either<Failure, DatumClEntity>> obtenerCliente({required String id});
 }

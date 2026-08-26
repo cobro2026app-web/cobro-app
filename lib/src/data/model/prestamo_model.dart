@@ -30,6 +30,7 @@ class DatumPModel extends DatumPEntity {
         required super.valorCuota,
         required super.interes,
         required super.montoInteres,
+        required super.deudaActual,
         required super.totalPagar,
         required super.numeroCuotas,
         required super.frecuencia,
@@ -45,6 +46,7 @@ class DatumPModel extends DatumPEntity {
     factory DatumPModel.fromJson(Map<String, dynamic> json) => DatumPModel(
         id: json["id"],
         usuarioId: json["clienteId"],
+        deudaActual: json["deudaActual"] ??0,
         creadoPorId: json["creadoPorId"],
         monto: json["monto"],
         valorCuota: json["valorCuota"],
@@ -53,13 +55,13 @@ class DatumPModel extends DatumPEntity {
         totalPagar: json["totalPagar"],
         numeroCuotas: json["numeroCuotas"],
         frecuencia: json["frecuencia"],
-        cliente:  DatumClModel.fromJson(json["cliente"]),
+        cliente: json["cliente"]==null?DatumClModel.fromJson({}): DatumClModel.fromJson(json["cliente"]),
         fechaInicio: DateTime.parse(json["fechaInicio"]),
         fechaFin: DateTime.parse(json["fechaFin"]),
         estado:json["estado"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
-        fechasPago: List<FechasPagoPModel>.from(json["fechasPago"].map((x) => FechasPagoPModel.fromJson(x))),
+        fechasPago:json["fechasPago"]==null?[]: List<FechasPagoPModel>.from(json["fechasPago"].map((x) => FechasPagoPModel.fromJson(x))),
     );
 
   

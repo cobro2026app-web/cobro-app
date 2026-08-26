@@ -18,6 +18,7 @@ class DatumPEntity {
   final int montoInteres;
   final int totalPagar;
   final int numeroCuotas;
+  final int deudaActual;
   final String frecuencia;
   final DateTime fechaInicio;
   final DateTime fechaFin;
@@ -45,6 +46,7 @@ class DatumPEntity {
     required this.updatedAt,
     required this.fechasPago,
     required this.cliente,
+    required this.deudaActual,
   });
 }
 

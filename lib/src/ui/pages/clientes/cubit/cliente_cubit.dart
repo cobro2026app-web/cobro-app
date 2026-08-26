@@ -13,6 +13,7 @@ import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/domain/repository/cliente_repo.dart';
 import 'package:personal/src/domain/repository/ruta_repo.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_home.dart';
+import 'package:personal/src/ui/pages/clientes/views/cliente_detalle_view.dart';
 import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
 
 part 'cliente_state.dart';
@@ -23,7 +24,7 @@ class ClienteCubit extends Cubit<ClienteState> {
   ///
 
   final _clienteRepo = sl<ClienteRepository>();
-  final _rutaRepo= sl<RutaRepo>();
+  final _rutaRepo = sl<RutaRepo>();
 
   ///Constructor
   ///
@@ -31,7 +32,6 @@ class ClienteCubit extends Cubit<ClienteState> {
 
   ClienteCubit(BuildContext context) : super(ClienteState(context: context)) {
     setChild(ClientHome());
-    listClientes();
     listarRuta();
   }
 
@@ -125,13 +125,28 @@ class ClienteCubit extends Cubit<ClienteState> {
     emit(state.copyWith(loadingBtn: false));
   }
 
-  void listarRuta()async{
-    if(Shared.getRutas==null){
+  void listarRuta() async {
+    if (Shared.getRutas == null) {
       final r = await _rutaRepo.listar();
-      r.fold((l){}, (r){
+      r.fold((l) {}, (r) {
         Shared.setRutas = r.data;
       });
     }
+  }
+
+  void detalleCliente(String id) async {
+    emit(state.copyWith(loading: true));
+    final r = await _clienteRepo.obtenerCliente(id: id);
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        emit(state.copyWith(cliente: r, child: ClienteDetalleView()));
+      
+      },
+    );
+    emit(state.copyWith(loading: false));
   }
 
   ///Navegacion

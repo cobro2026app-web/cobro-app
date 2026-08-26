@@ -1,3 +1,4 @@
+import 'package:personal/src/data/model/prestamo_model.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 
 class ClienteModel extends ClienteEntity {
@@ -25,19 +26,25 @@ class DatumClModel extends DatumClEntity {
     required super.descripcionDireccion,
     required super.estado,
     required super.totalPrestado,
+    super.prestamos,
   });
 
   factory DatumClModel.fromJson(Map<String, dynamic> json) => DatumClModel(
-    id: json["id"],
-    nombres: json["nombres"],
-    apellidos: json["apellidos"],
-    cedula: json["cedula"],
-    telefono: json["telefono"] ??"", 
-    rutaId: json["rutaId"] ??"", 
-    whatsapp: json["whatsapp"] ??"",
-    direccion: json["direccion"] ??"",
-    descripcionDireccion: json["descripcionDireccion"] ??"", 
-    estado: json["estado"] ??"",
-    totalPrestado: json["totalPrestado"] ??0,
+    id: json["id"] ?? "",
+    nombres: json["nombres"] ?? "",
+    apellidos: json["apellidos"] ?? "",
+    cedula: json["cedula"] ?? "",
+    telefono: json["telefono"] ?? "",
+    rutaId: json["rutaId"] ?? "",
+    whatsapp: json["whatsapp"] ?? "",
+    direccion: json["direccion"] ?? "",
+    descripcionDireccion: json["descripcionDireccion"] ?? "",
+    estado: json["estado"] ?? "",
+    totalPrestado: json["totalPrestado"] ?? 0,
+    prestamos: json["prestamos"] == null
+        ? <DatumPModel>[]
+        : (json["prestamos"] as List)
+              .map((e) => DatumPModel.fromJson(e))
+              .toList(),
   );
 }

@@ -48,6 +48,7 @@ class ClientHome extends StatelessWidget {
                     (c) => Container(
                       margin: EdgeInsets.only(top: 14),
                       child: ClientCardView(
+                        id: c.id,
                         initials:
                             '${c.nombres.substring(0, 1).toUpperCase()}${c.apellidos.substring(0, 1).toUpperCase()}',
                         name: c.nombres,

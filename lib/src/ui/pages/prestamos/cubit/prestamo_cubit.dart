@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +37,6 @@ class PrestamoCubit extends Cubit<PrestamoState> {
   PrestamoCubit(BuildContext context) : super(PrestamoState(context: context)) {
     onGetChild(PrestamosHome());
     onGetFechaInicial(DateTime.now());
-    listarPrestamo();
     listarClientes();
     listarConfig();
   }

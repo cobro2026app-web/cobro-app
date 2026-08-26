@@ -18,7 +18,7 @@ class PrestamosHome extends StatelessWidget {
             HeaderPView(),
 
             Expanded(
-              child: ListView(
+              child:  ListView(
                 padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
                 children: [
                   SearPView(),

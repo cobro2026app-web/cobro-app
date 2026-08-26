@@ -8,6 +8,7 @@ class ClienteState extends Equatable {
   final bool loadingBtn;
   final List<DatumClEntity>? clientes;
   final DatumREntity? ruta;
+  final DatumClEntity? cliente;
 
   const ClienteState({
     required this.context,
@@ -17,6 +18,7 @@ class ClienteState extends Equatable {
     this.child = const SizedBox(),
     this.clientes,
     this.ruta,
+    this.cliente,
   });
 
   @override
@@ -28,6 +30,7 @@ class ClienteState extends Equatable {
     clientes ?? [],
     loadingBtn,
     ruta,
+    cliente,
   ];
 
   ClienteState copyWith({
@@ -38,6 +41,7 @@ class ClienteState extends Equatable {
     Widget? child,
     List<DatumClEntity>? clientes,
     DatumREntity? ruta,
+    DatumClEntity? cliente,
   }) {
     return ClienteState(
       context: context ?? this.context,
@@ -47,6 +51,7 @@ class ClienteState extends Equatable {
       clientes: clientes ?? this.clientes,
       loadingBtn: loadingBtn ?? this.loadingBtn,
       ruta: ruta ?? this.ruta,
+      cliente: cliente ?? this.cliente,
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'package:personal/src/domain/entities/prestamo_entity.dart';
+
 class ClienteEntity {
   final bool exito;
   final String msg;
@@ -18,6 +20,7 @@ class DatumClEntity {
   final String descripcionDireccion;
   final String estado;
   final int totalPrestado;
+  final List<DatumPEntity>? prestamos;
 
   DatumClEntity({
     required this.id,
@@ -30,6 +33,7 @@ class DatumClEntity {
     required this.direccion,
     required this.descripcionDireccion,
     required this.estado,
-    required this.totalPrestado
+    required this.totalPrestado,
+    this.prestamos
   });
 }

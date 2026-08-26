@@ -8,6 +8,7 @@ abstract class ClienteService {
   Future<ClienteModel> listar();
 
   Future<dynamic> crear({required CrearClienteDto dto});
+  Future<DatumClModel> obtenerCliente({required String id});
 }
 
 class ClienteServiceImpl implements ClienteService {
@@ -30,8 +31,26 @@ class ClienteServiceImpl implements ClienteService {
 
   @override
   Future<dynamic> crear({required CrearClienteDto dto}) async {
-    final response = await apiClient.dio.post('/cliente', data: dto.toJson());
+    try {
+      final response = await apiClient.dio.post('/cliente', data: dto.toJson());
 
-    return response.data;
+      return response.data;
+    } on DioException catch (e) {
+      throw ServerExceptions(message: e.response!.data["message"]);
+    } catch (e) {
+      throw Exception("Error inesperado");
+    }
+  }
+
+  @override
+  Future<DatumClModel> obtenerCliente({required String id}) async {
+    try {
+      final r = await apiClient.dio.get("/cliente/$id");
+      return DatumClModel.fromJson(r.data["data"]);
+    } on DioException catch (e) {
+      throw ServerExceptions(message: e.response!.data["message"]);
+    } catch (e) {
+      throw Exception("Error inesperado");
+    }
   }
 }

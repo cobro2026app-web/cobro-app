@@ -23,7 +23,6 @@ class CobradorCubit extends Cubit<CobradorState> {
   CobradorCubit({required BuildContext context})
     : super(CobradorState(context: context)) {
     eventChild(CobradorHome());
-    listarCobrador();
   }
 
   ///Variables
