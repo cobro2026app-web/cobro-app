@@ -5,6 +5,7 @@ import 'package:personal/src/domain/entities/cliente_entity.dart';
 
 abstract class ClienteRepository {
   Future<Either<Failure, ClienteEntity>> listar();
+  Future<Either<Failure, ClienteEntity>> buscar({required String q});
 
   Future<Either<Failure, dynamic>> crear({required CrearClienteDto dto});
   Future<Either<Failure, dynamic>> editar({required CrearClienteDto dto, required String id});

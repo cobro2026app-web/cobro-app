@@ -9,12 +9,14 @@ class ClienteState extends Equatable {
   final List<DatumClEntity>? clientes;
   final DatumREntity? ruta;
   final DatumClEntity? cliente;
+  final bool search;
 
   const ClienteState({
     required this.context,
     this.loading = false,
     this.btnEnabled = false,
     this.loadingBtn = false,
+    this.search = false,
     this.child = const SizedBox(),
     this.clientes,
     this.ruta,
@@ -31,6 +33,7 @@ class ClienteState extends Equatable {
     loadingBtn,
     ruta,
     cliente,
+    search,
   ];
 
   ClienteState copyWith({
@@ -43,6 +46,7 @@ class ClienteState extends Equatable {
     DatumREntity? ruta,
     DatumClEntity? cliente,
     bool limpiarRuta = false,
+    bool? search,
   }) {
     return ClienteState(
       context: context ?? this.context,
@@ -53,6 +57,7 @@ class ClienteState extends Equatable {
       loadingBtn: loadingBtn ?? this.loadingBtn,
       ruta: limpiarRuta ? null : ruta ?? this.ruta,
       cliente: cliente ?? this.cliente,
+      search: search ?? this.search,
     );
   }
 }

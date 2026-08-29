@@ -177,6 +177,11 @@ class ClienteCubit extends Cubit<ClienteState> {
         cliente.descripcionDireccion,
         observationTxt.text.trim(),
       ),
+      barrio: UpdateUtil.valorModificado(cliente.barrio, barrioTxt.text),
+      observacion: UpdateUtil.valorModificado(
+        cliente.observacion,
+        observationTxt.text,
+      ),
     );
 
     final r = await _clienteRepo.editar(dto: dto, id: state.cliente!.id);
@@ -211,6 +216,16 @@ class ClienteCubit extends Cubit<ClienteState> {
       },
     );
     emit(state.copyWith(loading: false));
+  }
+  void buscar(String q)async{
+    emit(state.copyWith(search: true));
+    final r = await _clienteRepo.buscar(q: q);
+    r.fold((l){}, (r){
+      emit(state.copyWith(clientes: r.data));
+    });
+    emit(state.copyWith(search: false));
+
+
   }
 
   ///Navegacion

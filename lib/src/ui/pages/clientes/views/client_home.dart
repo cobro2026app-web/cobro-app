@@ -22,8 +22,14 @@ class ClientHome extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
                 children: [
-                  SearchClienteView(),
-
+                  SearchClienteView(
+                    onSearch: (e) {
+                      context.read<ClienteCubit>().buscar(e);
+                    },
+                  ),
+                  Visibility(
+                    visible: state.search,
+                    child: Center(child: CircularProgressIndicator.adaptive())),
                   const SizedBox(height: 18),
 
                   Row(

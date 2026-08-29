@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/common/theme/theme.dart';
+import 'package:personal/src/common/utils/contact_util.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_home.dart';
@@ -156,22 +157,29 @@ class ClienteDetalleView extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: cliente.estado == 'ACTIVO'
-                  ? Colors.green.withValues(alpha: .15)
-                  : Colors.red.withValues(alpha: .15),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              cliente.estado,
-              style: TextStyle(
-                color: cliente.estado == 'ACTIVO' ? Colors.green : Colors.red,
-                fontSize: 10,
-                fontWeight: FontWeight.w800,
+          Row(
+            mainAxisAlignment: .center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.call, color: Colors.white),
+                onPressed: () {
+                  ContactUtil.open(
+                    telefono: cliente.telefono,
+                    action: ContactAction.call,
+                  );
+                },
               ),
-            ),
+              IconButton(
+                icon: Icon(Icons.call, color: Colors.white),
+                onPressed: () {
+                  ContactUtil.open(
+                    telefono: cliente.whatsapp,
+                    action: ContactAction.whatsapp,
+                  );
+                },
+              ),
+              
+            ],
           ),
         ],
       ),

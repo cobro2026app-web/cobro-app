@@ -6,6 +6,7 @@ import 'package:personal/src/domain/dto/crear_cliente_dto.dart';
 
 abstract class ClienteService {
   Future<ClienteModel> listar();
+  Future<ClienteModel> buscar({required String q});
 
   Future<dynamic> crear({required CrearClienteDto dto});
   Future<dynamic> editar({required CrearClienteDto dto, required String id});
@@ -67,6 +68,18 @@ class ClienteServiceImpl implements ClienteService {
       );
 
       return response.data;
+    } on DioException catch (e) {
+      throw ServerExceptions(message: e.response!.data["message"]);
+    } catch (e) {
+      throw Exception("Error inesperado");
+    }
+  }
+
+  @override
+  Future<ClienteModel> buscar({required String q}) async {
+    try {
+      final r = await apiClient.dio.get("/cliente/buscar?q=$q");
+      return ClienteModel.fromJson(r.data);
     } on DioException catch (e) {
       throw ServerExceptions(message: e.response!.data["message"]);
     } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/common/utils/contact_util.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 import 'package:personal/src/ui/pages/clientes/views/cliente_detalle_view.dart';
@@ -170,7 +171,9 @@ class ClientCardView extends StatelessWidget {
           Column(
             children: [
               _actionButton(
-                onTap: () {},
+                onTap: () {
+                  ContactUtil.open(telefono: phone, action: ContactAction.call);
+                },
                 icon: Icons.phone_outlined,
                 color: const Color(0xFF4F7CFF),
               ),
