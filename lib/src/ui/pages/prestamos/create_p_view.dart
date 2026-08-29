@@ -27,7 +27,8 @@ class _CrearPrestamoViewState extends State<CrearPrestamoView> {
         // ── Cálculos centralizados ──────────────────────────────
         final monto = int.tryParse(cubit.montoController.text) ?? 0;
         final interes = int.tryParse(cubit.interesController.text) ?? 0;
-        final seguro = int.tryParse(cubit.seguroController.text) ?? 0;
+        final seguro =
+            monto * int.tryParse(cubit.seguroController.text)!.toInt() / 100;
         final interesMonto = (monto * interes / 100).toInt();
         final total = monto + interesMonto;
         final cuotas = state.periodoSeleccionado?.cuotas ?? 0;
@@ -62,7 +63,7 @@ class _CrearPrestamoViewState extends State<CrearPrestamoView> {
                 const SizedBox(height: 14),
                 InputWidget.input(
                   label: 'Monto inicial',
-                  hintText: 'Ej: 1.000.000',
+                  hintText: 'Ej: 100',
                   prefixIcon: Icons.attach_money_rounded,
                   controller: cubit.montoController,
                   keyboardType: TextInputType.number,
@@ -139,7 +140,7 @@ class _CrearPrestamoViewState extends State<CrearPrestamoView> {
                 _Summary(
                   monto: monto,
                   interesMonto: interesMonto,
-                  seguro: seguro,
+                  seguro: seguro.toInt(),
                   seguroPct: cubit.seguroController.text,
                   interesPct: cubit.interesController.text,
                   total: total,
@@ -227,7 +228,6 @@ class _CrearPrestamoViewState extends State<CrearPrestamoView> {
       },
     );
   }
-
 }
 
 // ══════════════════════════════════════════════════════════════════════════════

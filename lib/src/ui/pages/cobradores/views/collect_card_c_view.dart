@@ -104,28 +104,11 @@ class CollectCardCView extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // ------------------------------------------------
-              // MORE
-              // ------------------------------------------------
-              IconButton(
-                onPressed: () {},
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                icon: const Icon(
-                  Icons.more_vert_rounded,
-                  color: Color(0xFF8A93A3),
-                  size: 21,
-                ),
-              ),
             ],
           ),
 
           const SizedBox(height: 15),
 
-          // ----------------------------------------------------
-          // BOTTOM
-          // ----------------------------------------------------
           Row(
             children: [
               Container(
@@ -172,8 +155,9 @@ class CollectCardCView extends StatelessWidget {
               _actionButton(
                 action: () {
                   context.read<CobradorCubit>().detalleCobrador(id);
-                  context.read<CobradorCubit>().eventChild(CobradorDetalleView());
-
+                  context.read<CobradorCubit>().eventChild(
+                    CobradorDetalleView(),
+                  );
                 },
 
                 icon: Icons.visibility,

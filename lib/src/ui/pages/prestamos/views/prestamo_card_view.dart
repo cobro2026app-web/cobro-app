@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:personal/src/ui/pages/prestamos/views/cobrar.dart';
 
 class PrestamoCardView extends StatelessWidget {
   const PrestamoCardView({
@@ -10,6 +13,7 @@ class PrestamoCardView extends StatelessWidget {
     required this.installment,
     required this.paid,
     required this.status,
+    required this.id,
     required this.statusColor,
     required this.statusBackground,
   });
@@ -21,6 +25,7 @@ class PrestamoCardView extends StatelessWidget {
   final String installment;
   final String paid;
   final String status;
+  final String id;
   final Color statusColor;
   final Color statusBackground;
 
@@ -154,10 +159,22 @@ class PrestamoCardView extends StatelessWidget {
               ),
 
               Expanded(
-                child: _loanInfo(
-                  label: 'Cuotas',
-                  value: paid,
-                  icon: Icons.check_circle_outline,
+                child: GestureDetector(
+                  onTap: () {
+                    showCobroBottomSheet(
+                      context,
+                      clienteNombre: client,
+                      cuota: int.parse(installment.replaceAll("\$", "")),
+                      deudaActual: int.parse(amount.replaceAll("\$", "")),
+                      onConfirmar: () {
+                      },
+                    );
+                  },
+                  child: _loanInfo(
+                    label: 'Cobrar',
+                    value: "Cobrar",
+                    icon: Icons.attach_money_outlined,
+                  ),
                 ),
               ),
             ],
@@ -165,9 +182,8 @@ class PrestamoCardView extends StatelessWidget {
         ],
       ),
     );
-    
   }
-  
+
   Widget _loanInfo({
     required String label,
     required String value,
