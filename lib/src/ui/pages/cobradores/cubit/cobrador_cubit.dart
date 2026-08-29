@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:personal/get_it.dart';
 import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
+import 'package:personal/src/common/utils/update_util.dart';
 import 'package:personal/src/domain/dto/crear_cobrador_dto.dart';
 import 'package:personal/src/domain/entities/cobrador_entity.dart';
 import 'package:personal/src/domain/repository/ruta_repo.dart';
@@ -52,16 +53,19 @@ class CobradorCubit extends Cubit<CobradorState> {
   ///Validaciones
   ///
   ///
-  void enbaledBtn() {
-    final checkEnabled = [
+  void enbaledBtn({bool isEdit = false}) {
+    final fieldsValid = [
       nameTxt,
       lastNameTxt,
       ideTxt,
       contacTxt,
-      userTxt,
-      passTxt,
     ].every((text) => text.text.trim().isNotEmpty);
-    emit(state.copyWith(btnEnabled: checkEnabled));
+
+    final credentialsValid = userTxt.text.isEmpty && passTxt.text.isEmpty;
+
+    emit(
+      state.copyWith(btnEnabled: fieldsValid && (isEdit || credentialsValid)),
+    );
   }
 
   ///Peticiones
@@ -135,6 +139,42 @@ class CobradorCubit extends Cubit<CobradorState> {
     emit(state.copyWith(loading: false));
   }
 
+  void editarCobrador() async {
+    emit(state.copyWith(loadingbtn: true));
+    final r = await _usuarioRepo.editarCobrador(
+      id: state.cobrador!.id,
+      dto: CrearCobradorDto(
+        nombre: UpdateUtil.valorModificado(
+          state.cobrador!.nombre,
+          nameTxt.text,
+        ),
+        apellido: UpdateUtil.valorModificado(
+          state.cobrador!.apellido,
+          lastNameTxt.text,
+        ),
+        telefono: UpdateUtil.valorModificado(
+          state.cobrador!.telefono,
+          contacTxt.text,
+        ),
+      ),
+    );
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        listarCobrador();
+        eventChild(CobradorHome());
+        AppDialogUtil.success(
+          state.context,
+          message: "Cobrador editado con exito.",
+        );
+      },
+    );
+
+    emit(state.copyWith(loadingbtn: false));
+  }
+
   ///Navegacion
   ///
   ///
@@ -142,6 +182,17 @@ class CobradorCubit extends Cubit<CobradorState> {
   ///Otros
   ///
   ///
+  ///
+
+  void loadC() {
+    final c = state.cobrador!;
+
+    nameTxt.text = c.nombre;
+    lastNameTxt.text = c.apellido;
+    ideTxt.text = c.documento;
+    contacTxt.text = c.telefono;
+  }
+
   void clear() {
     nameTxt.clear();
     lastNameTxt.clear();

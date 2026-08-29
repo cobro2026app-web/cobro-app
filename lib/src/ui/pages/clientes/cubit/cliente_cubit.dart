@@ -156,8 +156,6 @@ class ClienteCubit extends Cubit<ClienteState> {
         lastNameTxt.text.trim(),
       ),
 
-      cedula: UpdateUtil.valorModificado(cliente.cedula, ideTxt.text.trim()),
-
       telefono: UpdateUtil.valorModificado(
         cliente.telefono,
         contactTxt.text.trim(),
@@ -217,15 +215,14 @@ class ClienteCubit extends Cubit<ClienteState> {
     );
     emit(state.copyWith(loading: false));
   }
-  void buscar(String q)async{
+
+  void buscar(String q) async {
     emit(state.copyWith(search: true));
     final r = await _clienteRepo.buscar(q: q);
-    r.fold((l){}, (r){
+    r.fold((l) {}, (r) {
       emit(state.copyWith(clientes: r.data));
     });
     emit(state.copyWith(search: false));
-
-
   }
 
   ///Navegacion

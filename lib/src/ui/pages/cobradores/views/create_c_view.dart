@@ -6,7 +6,8 @@ import 'package:personal/src/ui/pages/cobradores/views/cobrador_home.dart';
 import 'package:personal/src/ui/widgets/widgets.dart';
 
 class CreateCView extends StatelessWidget {
-  const CreateCView({super.key});
+  final bool isEdit;
+  CreateCView({super.key, this.isEdit = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +26,8 @@ class CreateCView extends StatelessWidget {
                 },
                 icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
               ),
-              title: const Text(
-                'Nuevo cobrador',
+              title: Text(
+                isEdit ? "Editar cobrador" : 'Nuevo cobrador',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -59,7 +60,7 @@ class CreateCView extends StatelessWidget {
                     enabled: !state.loadingbtn,
 
                     onChanged: (e) {
-                      c.enbaledBtn();
+                      c.enbaledBtn(isEdit: isEdit);
                     },
                   ),
 
@@ -73,7 +74,7 @@ class CreateCView extends StatelessWidget {
                     enabled: !state.loadingbtn,
 
                     onChanged: (e) {
-                      c.enbaledBtn();
+                      c.enbaledBtn(isEdit: isEdit);
                     },
                   ),
 
@@ -81,14 +82,15 @@ class CreateCView extends StatelessWidget {
 
                   InputWidget.input(
                     label: 'Cédula',
+
                     hintText: 'Ingrese el número de cédula',
                     prefixIcon: Icons.badge_outlined,
                     controller: c.ideTxt,
-                    enabled: !state.loadingbtn,
+                    enabled: !state.loadingbtn && !isEdit,
 
                     keyboardType: TextInputType.number,
                     onChanged: (e) {
-                      c.enbaledBtn();
+                      c.enbaledBtn(isEdit: isEdit);
                     },
                   ),
 
@@ -103,51 +105,60 @@ class CreateCView extends StatelessWidget {
 
                     keyboardType: TextInputType.phone,
                     onChanged: (e) {
-                      c.enbaledBtn();
+                      c.enbaledBtn(isEdit: isEdit);
                     },
                   ),
 
                   const SizedBox(height: 28),
 
-                  _sectionTitle(
-                    icon: Icons.lock_outline_rounded,
-                    title: 'Acceso a la aplicación',
+                  Visibility(
+                    visible: !isEdit,
+                    child: _sectionTitle(
+                      icon: Icons.lock_outline_rounded,
+                      title: 'Acceso a la aplicación',
+                    ),
                   ),
 
                   const SizedBox(height: 14),
 
-                  InputWidget.input(
-                    label: 'Usuario',
-                    hintText: 'Asigne un usuario',
-                    enabled: !state.loadingbtn,
+                  Visibility(
+                    visible: !isEdit,
+                    child: InputWidget.input(
+                      label: 'Usuario',
+                      hintText: 'Asigne un usuario',
+                      enabled: !state.loadingbtn,
 
-                    prefixIcon: Icons.account_circle_outlined,
-                    controller: c.userTxt,
-                    onChanged: (e) {
-                      c.enbaledBtn();
-                    },
+                      prefixIcon: Icons.account_circle_outlined,
+                      controller: c.userTxt,
+                      onChanged: (e) {
+                        c.enbaledBtn();
+                      },
+                    ),
                   ),
 
                   const SizedBox(height: 16),
 
-                  InputWidget.input(
-                    label: 'Contraseña',
-                    hintText: 'Asigne una contraseña',
-                    enabled: !state.loadingbtn,
+                  Visibility(
+                    visible: !isEdit,
+                    child: InputWidget.input(
+                      label: 'Contraseña',
+                      hintText: 'Asigne una contraseña',
+                      enabled: !state.loadingbtn,
 
-                    prefixIcon: Icons.lock_outline_rounded,
-                    suffixIcon: !state.showPass
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    onSuffixPressed: () {
-                      c.onShowPassword();
-                    },
-                    controller: c.passTxt,
-                    obscureText: state.showPass,
+                      prefixIcon: Icons.lock_outline_rounded,
+                      suffixIcon: !state.showPass
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      onSuffixPressed: () {
+                        c.onShowPassword();
+                      },
+                      controller: c.passTxt,
+                      obscureText: state.showPass,
 
-                    onChanged: (e) {
-                      c.enbaledBtn();
-                    },
+                      onChanged: (e) {
+                        c.enbaledBtn();
+                      },
+                    ),
                   ),
 
                   const SizedBox(height: 30),
@@ -156,11 +167,15 @@ class CreateCView extends StatelessWidget {
                     width: double.infinity,
                     height: 54,
                     child: BtnWidget.btn(
-                      text: 'Crear cobrador',
+                      text: isEdit ? "Editar cobrador" : 'Crear cobrador',
 
                       icon: Icons.person_add_alt_1_rounded,
                       onPressed: () {
-                        c.crearCobrador();
+                        if (isEdit) {
+                          c.editarCobrador();
+                        } else {
+                          c.crearCobrador();
+                        }
                       },
                       loading: state.loadingbtn,
                       enabled: state.btnEnabled,
@@ -207,49 +222,52 @@ class CreateCView extends StatelessWidget {
   // ============================================================
 
   Widget _header() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppTheme.primaryColor,
-            AppTheme.primaryColor.withValues(alpha: .80),
+    return Visibility(
+      visible: !isEdit,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppTheme.primaryColor,
+              AppTheme.primaryColor.withValues(alpha: .80),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.badge_outlined, color: Colors.white, size: 32),
+
+            SizedBox(width: 14),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Registrar cobrador',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+
+                  SizedBox(height: 4),
+
+                  Text(
+                    'Complete la información para crear el perfil.',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.badge_outlined, color: Colors.white, size: 32),
-
-          SizedBox(width: 14),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Registrar cobrador',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-
-                SizedBox(height: 4),
-
-                Text(
-                  'Complete la información para crear el perfil.',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

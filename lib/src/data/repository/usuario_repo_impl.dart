@@ -59,4 +59,22 @@ class UsuarioRepoImpl implements UsuarioRepository {
       return Left(failure);
     }
   }
+
+  @override
+  Future<Either<Failure, dynamic>> editarCobrador({
+    required String id,
+    required CrearCobradorDto dto,
+  }) async {
+    try {
+      final response = await usuarioService.editarCobrador(id: id, dto: dto);
+
+      return Right(response);
+    } on ServerExceptions catch (e) {
+      final failure = ServerFailure(message: e.message);
+      return Left(failure);
+    } catch (e) {
+      final failure = ServerFailure(message: "Error inesperado: $e");
+      return Left(failure);
+    }
+  }
 }

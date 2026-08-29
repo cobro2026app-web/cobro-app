@@ -5,6 +5,7 @@ import 'package:personal/src/common/utils/contact_util.dart';
 import 'package:personal/src/domain/entities/cobrador_entity.dart';
 import 'package:personal/src/ui/pages/cobradores/cubit/cobrador_cubit.dart';
 import 'package:personal/src/ui/pages/cobradores/views/cobrador_home.dart';
+import 'package:personal/src/ui/pages/cobradores/views/create_c_view.dart';
 
 // ignore: must_be_immutable
 class CobradorDetalleView extends StatelessWidget {
@@ -230,27 +231,34 @@ class CobradorDetalleView extends StatelessWidget {
   // ---------------------------------------------------------------------------
 
   Widget _editButton() {
-    return SizedBox(
-      width: double.infinity,
-      height: 48,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.primaryColor,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+    return BlocBuilder<CobradorCubit, CobradorState>(
+      builder: (context, state) {
+        return SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<CobradorCubit>().loadC();
+              context.read<CobradorCubit>().eventChild(CreateCView(isEdit: true,));
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryColor,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            child: const Text(
+              'Editar cobrador',
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-        child: const Text(
-          'Editar cobrador',
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 
