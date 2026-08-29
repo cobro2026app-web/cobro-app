@@ -5,10 +5,12 @@ import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_home.dart';
+import 'package:personal/src/ui/pages/clientes/views/cliente_detalle_view.dart';
 import 'package:personal/src/ui/widgets/widgets.dart';
 
 class CreateClientView extends StatelessWidget {
-  const CreateClientView({super.key});
+  final bool isEdit;
+  const CreateClientView({super.key, this.isEdit = false});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +23,12 @@ class CreateClientView extends StatelessWidget {
             backgroundColor: AppTheme.primaryColor,
             elevation: 0,
             leading: IconButton(
-              onPressed: () => c.setChild(ClientHome()),
+              onPressed: () =>
+                  c.setChild(isEdit ? ClienteDetalleView() : ClientHome()),
               icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
             ),
-            title: const Text(
-              'Nuevo cliente',
+            title: Text(
+              isEdit ? "Editar cliente" : 'Nuevo cliente',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -233,12 +236,15 @@ class CreateClientView extends StatelessWidget {
                   width: double.infinity,
                   height: 54,
                   child: BtnWidget.btn(
-                    text: 'Crear cliente',
+                    text: isEdit ? "Editar cliente" : 'Crear cliente',
                     loading: state.loadingBtn,
                     icon: Icons.person_add_alt_1_rounded,
                     onPressed: state.btnEnabled
                         ? () {
-                            c.crearCliente();
+                            if (isEdit) {
+                            } else {
+                              c.crearCliente();
+                            }
                           }
                         : null,
                     enabled: state.btnEnabled,
@@ -280,47 +286,50 @@ class CreateClientView extends StatelessWidget {
   }
 
   Widget _header() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppTheme.primaryColor,
-            AppTheme.primaryColor.withValues(alpha: .80),
+    return Visibility(
+      visible: !isEdit,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              AppTheme.primaryColor,
+              AppTheme.primaryColor.withValues(alpha: .80),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 32),
+
+            SizedBox(width: 14),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Registrar cliente',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'Complete la información del nuevo cliente.',
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.person_add_alt_1_rounded, color: Colors.white, size: 32),
-
-          SizedBox(width: 14),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Registrar cliente',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  'Complete la información del nuevo cliente.',
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

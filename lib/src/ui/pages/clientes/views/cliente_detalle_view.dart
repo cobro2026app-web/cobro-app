@@ -4,6 +4,7 @@ import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/ui/pages/clientes/cubit/cliente_cubit.dart';
 import 'package:personal/src/ui/pages/clientes/views/client_home.dart';
+import 'package:personal/src/ui/pages/clientes/views/create_client_view.dart';
 import 'package:personal/src/ui/pages/rutas/cubit/ruta_cubit.dart';
 
 // ignore: must_be_immutable
@@ -16,6 +17,7 @@ class ClienteDetalleView extends StatelessWidget {
     return BlocBuilder<ClienteCubit, ClienteState>(
       builder: (context, state) {
         cliente = state.cliente!;
+        final c = context.read<ClienteCubit>();
         return Scaffold(
           backgroundColor: const Color(0xFFF5F7FC),
           appBar: AppBar(
@@ -45,9 +47,25 @@ class ClienteDetalleView extends StatelessWidget {
 
                 const SizedBox(height: 22),
 
-                _sectionTitle(
-                  icon: Icons.person_outline_rounded,
-                  title: 'Información personal',
+                Row(
+                  mainAxisAlignment: .spaceBetween,
+                  children: [
+                    _sectionTitle(
+                      icon: Icons.person_outline_rounded,
+                      title: 'Información personal',
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        c.clear();
+                        c.loadInfo();
+                        c.setChild(CreateClientView(isEdit: true));
+                      },
+                      icon: Icon(
+                        Icons.edit_outlined,
+                        color: AppTheme.primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 12),
@@ -201,10 +219,9 @@ class ClienteDetalleView extends StatelessWidget {
 
   Widget _deudaCard() {
     final deuda =
-        cliente.prestamos?.fold<num>(
-          0,
-          (total, prestamo) => total + (prestamo.deudaActual ?? 0),
-        ) ??
+        cliente.prestamos
+            ?.where((prestamo) => prestamo.estado == 'ACTIVO')
+            .fold<num>(0, (total, prestamo) => total + prestamo.deudaActual) ??
         0;
     return Container(
       width: double.infinity,
@@ -324,8 +341,8 @@ class ClienteDetalleView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Préstamo activo',
+                    Text(
+                      'Préstamo ${prestamo.estado.toLowerCase()}',
                       style: TextStyle(
                         color: Color(0xFF202838),
                         fontSize: 13,
@@ -345,8 +362,6 @@ class ClienteDetalleView extends StatelessWidget {
                   ],
                 ),
               ),
-
-              const Icon(Icons.chevron_right_rounded, color: Color(0xFFB3B9C3)),
             ],
           ),
         );

@@ -55,6 +55,7 @@ class HeaderClienteView extends StatelessWidget {
                       foregroundColor: Colors.white,
                       icon: Icons.add_rounded,
                       onPressed: () {
+                        c.clear();
                         c.setChild(CreateClientView());
                       },
                       backgroundColor: AppTheme.primaryColor,

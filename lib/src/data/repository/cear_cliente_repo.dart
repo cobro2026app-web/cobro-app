@@ -57,4 +57,21 @@ class ClienteRepoImpl implements ClienteRepository {
       return Left(failure);
     }
   }
+
+  @override
+  Future<Either<Failure, dynamic>> editar({
+    required CrearClienteDto dto,
+    required String id,
+  }) async {
+    try {
+      final response = await clienteService.editar(dto: dto, id: id);
+      return Right(response);
+    } on ServerExceptions catch (e) {
+      final failure = ServerFailure(message: e.message);
+      return Left(failure);
+    } catch (e) {
+      final failure = ServerFailure(message: "Error inesperado: $e");
+      return Left(failure);
+    }
+  }
 }

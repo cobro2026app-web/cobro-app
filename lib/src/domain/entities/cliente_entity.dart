@@ -18,6 +18,8 @@ class DatumClEntity {
   final String whatsapp;
   final String direccion;
   final String descripcionDireccion;
+  final String barrio;
+  final String observacion;
   final String estado;
   final int totalPrestado;
   final List<DatumPEntity>? prestamos;
@@ -32,6 +34,8 @@ class DatumClEntity {
     required this.whatsapp,
     required this.direccion,
     required this.descripcionDireccion,
+    required this.barrio,
+    required this.observacion,
     required this.estado,
     required this.totalPrestado,
     this.prestamos

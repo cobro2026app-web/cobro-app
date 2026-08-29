@@ -42,6 +42,7 @@ class ClienteState extends Equatable {
     List<DatumClEntity>? clientes,
     DatumREntity? ruta,
     DatumClEntity? cliente,
+    bool limpiarRuta = false,
   }) {
     return ClienteState(
       context: context ?? this.context,
@@ -50,7 +51,7 @@ class ClienteState extends Equatable {
       child: child ?? this.child,
       clientes: clientes ?? this.clientes,
       loadingBtn: loadingBtn ?? this.loadingBtn,
-      ruta: ruta ?? this.ruta,
+      ruta: limpiarRuta ? null : ruta ?? this.ruta,
       cliente: cliente ?? this.cliente,
     );
   }

@@ -143,7 +143,6 @@ class ClienteCubit extends Cubit<ClienteState> {
       },
       (r) {
         emit(state.copyWith(cliente: r, child: ClienteDetalleView()));
-      
       },
     );
     emit(state.copyWith(loading: false));
@@ -168,7 +167,25 @@ class ClienteCubit extends Cubit<ClienteState> {
     barrioTxt.clear();
     observationTxt.clear();
 
-    emit(state.copyWith(btnEnabled: false));
+    emit(state.copyWith(btnEnabled: false, limpiarRuta: true));
+  }
+
+  void loadInfo() {
+    final c = state.cliente!;
+    nameTxt.text = c.nombres;
+    lastNameTxt.text = c.apellidos;
+    ideTxt.text = c.direccion;
+    contactTxt.text = c.telefono;
+    whatsappTxt.text = c.whatsapp;
+    directionTxt.text = c.direccion;
+    addressDescriptionTxt.text = c.descripcionDireccion;
+    barrioTxt.text = c.barrio;
+    observationTxt.text = c.observacion;
+    emit(
+      state.copyWith(
+        ruta: Shared.getRutas!.firstWhere((e) => e.id == c.rutaId),
+      ),
+    );
   }
 
   @override
