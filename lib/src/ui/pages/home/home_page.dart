@@ -19,14 +19,30 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           return SafeArea(
             child: Scaffold(
-            key: context.read<HomeCubit>().scaffoldKey,
+              key: context.read<HomeCubit>().scaffoldKey,
               drawer: const DrawerHome(),
-              body: getChild(state.currentIndex),
+              body: Stack(
+                children: [
+                  getChild(state.currentIndex),
+                  Visibility(
+                    visible: state.loadPay,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      color: Colors.black.withValues(alpha: .3),
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  ),
+                ],
+              ),
               bottomNavigationBar: BottomNavWidget(
                 currentIndex: state.currentIndex,
-                onTap: (index) {
-                  context.read<HomeCubit>().onCurrenteIndex(index);
-                },
+                onTap: state.loadPay
+                    ? (index) {}
+                    : (index) {
+                        context.read<HomeCubit>().onCurrenteIndex(index);
+                      },
               ),
             ),
           );

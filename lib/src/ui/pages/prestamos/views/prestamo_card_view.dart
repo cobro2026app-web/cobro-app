@@ -1,6 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
+import 'package:personal/src/ui/pages/prestamos/cubit/prestamo_cubit.dart';
 import 'package:personal/src/ui/pages/prestamos/views/cobrar.dart';
 
 class PrestamoCardView extends StatelessWidget {
@@ -166,7 +169,16 @@ class PrestamoCardView extends StatelessWidget {
                       clienteNombre: client,
                       cuota: int.parse(installment.replaceAll("\$", "")),
                       deudaActual: int.parse(amount.replaceAll("\$", "")),
-                      onConfirmar: () {
+                      onConfirmar: () async {
+                        context.read<HomeCubit>().pagar(
+                          id: id,
+                          monto: int.parse(installment.replaceAll("\$", "")),
+                        ).then((e){
+                              if(e){
+                                // ignore: use_build_context_synchronously
+                                context.read<PrestamoCubit>().listarPrestamo();
+                              }
+                        });
                       },
                     );
                   },
