@@ -121,6 +121,20 @@ class CobradorCubit extends Cubit<CobradorState> {
     emit(state.copyWith(loadingbtn: false));
   }
 
+  void detalleCobrador(String id) async {
+    emit(state.copyWith(loading: true));
+    final r = await _usuarioRepo.detalleCobrador(id: id);
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        emit(state.copyWith(cobrador: r));
+      },
+    );
+    emit(state.copyWith(loading: false));
+  }
+
   ///Navegacion
   ///
   ///

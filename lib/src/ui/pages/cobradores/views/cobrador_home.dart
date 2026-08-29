@@ -28,7 +28,8 @@ class CobradorHome extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 14),
                       child: CollectCardCView(
                         name: c.nombre,
-
+                        phone: c.telefono,
+                        id: c.id,
                         route:
                             Shared.getRutas!
                                 .where((e) => e.cobrador?.id == c.id)

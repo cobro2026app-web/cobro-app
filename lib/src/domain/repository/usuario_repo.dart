@@ -7,7 +7,7 @@ abstract class UsuarioRepository {
 
   Future<Either<Failure, CobradorEntity>> listarCobradores();
 
- 
+Future<Either<Failure, DatumCEntity>> detalleCobrador({required String id});
 
   Future<Either<Failure, dynamic>> crearCobrador({
     required CrearCobradorDto dto,

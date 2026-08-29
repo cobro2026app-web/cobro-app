@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/common/utils/contact_util.dart';
+import 'package:personal/src/ui/pages/cobradores/cubit/cobrador_cubit.dart';
+import 'package:personal/src/ui/pages/cobradores/views/corbador_detalle_view.dart';
 import 'package:personal/src/ui/pages/cobradores/views/status_collect_card.dart';
 
 class CollectCardCView extends StatelessWidget {
   final String name;
   final String route;
+  final String id;
+  final String phone;
   final int clients;
   final String collected;
   final String avatar;
@@ -16,6 +22,8 @@ class CollectCardCView extends StatelessWidget {
     required this.collected,
     required this.avatar,
     required this.active,
+    required this.phone,
+    required this.id,
   });
 
   @override
@@ -152,6 +160,9 @@ class CollectCardCView extends StatelessWidget {
               const Spacer(),
 
               _actionButton(
+                action: () {
+                  ContactUtil.open(telefono: phone, action: ContactAction.call);
+                },
                 icon: Icons.phone_outlined,
                 color: const Color(0xFF4F7CFF),
               ),
@@ -159,7 +170,13 @@ class CollectCardCView extends StatelessWidget {
               const SizedBox(width: 8),
 
               _actionButton(
-                icon: Icons.edit_outlined,
+                action: () {
+                  context.read<CobradorCubit>().detalleCobrador(id);
+                  context.read<CobradorCubit>().eventChild(CobradorDetalleView());
+
+                },
+
+                icon: Icons.visibility,
                 color: const Color(0xFFFFA62B),
               ),
             ],
@@ -169,15 +186,22 @@ class CollectCardCView extends StatelessWidget {
     );
   }
 
-  Widget _actionButton({required IconData icon, required Color color}) {
-    return Container(
-      width: 40,
-      height: 40,
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: .09),
-        borderRadius: BorderRadius.circular(12),
+  Widget _actionButton({
+    required Function() action,
+    required IconData icon,
+    required Color color,
+  }) {
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: .09),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: color, size: 19),
       ),
-      child: Icon(icon, color: color, size: 19),
     );
   }
 }

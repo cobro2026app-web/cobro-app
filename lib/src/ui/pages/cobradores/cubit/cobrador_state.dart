@@ -8,6 +8,7 @@ class CobradorState extends Equatable {
   final bool btnEnabled;
   final bool showPass;
   final List<DatumCEntity>? cobradores;
+  final DatumCEntity? cobrador;
   const CobradorState({
     required this.context,
     this.child = const SizedBox(),
@@ -16,10 +17,11 @@ class CobradorState extends Equatable {
     this.btnEnabled = false,
     this.showPass = false,
     this.cobradores,
+    this.cobrador,
   });
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
     context,
     loading,
     btnEnabled,
@@ -27,6 +29,7 @@ class CobradorState extends Equatable {
     showPass,
     cobradores ?? [],
     loadingbtn,
+    cobrador,
   ];
 
   CobradorState copyWith({
@@ -37,6 +40,7 @@ class CobradorState extends Equatable {
     bool? showPass,
     bool? loadingbtn,
     List<DatumCEntity>? cobradores,
+    DatumCEntity? cobrador,
   }) {
     return CobradorState(
       context: context ?? this.context,
@@ -46,6 +50,7 @@ class CobradorState extends Equatable {
       showPass: showPass ?? this.showPass,
       cobradores: cobradores ?? this.cobradores,
       loadingbtn: loadingbtn ?? this.loadingbtn,
+      cobrador: cobrador ?? this.cobrador,
     );
   }
 }
