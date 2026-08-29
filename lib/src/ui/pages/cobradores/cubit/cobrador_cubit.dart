@@ -6,6 +6,7 @@ import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
 import 'package:personal/src/domain/dto/crear_cobrador_dto.dart';
 import 'package:personal/src/domain/entities/cobrador_entity.dart';
+import 'package:personal/src/domain/repository/ruta_repo.dart';
 import 'package:personal/src/domain/repository/usuario_repo.dart';
 import 'package:personal/src/ui/pages/cobradores/views/cobrador_home.dart';
 
@@ -16,6 +17,7 @@ class CobradorCubit extends Cubit<CobradorState> {
   ///
   ///
   final _usuarioRepo = sl<UsuarioRepository>();
+  final _rutaRepo = sl<RutaRepo>();
 
   ///Constructor
   ///
@@ -23,6 +25,7 @@ class CobradorCubit extends Cubit<CobradorState> {
   CobradorCubit({required BuildContext context})
     : super(CobradorState(context: context)) {
     eventChild(CobradorHome());
+    listarRuta();
   }
 
   ///Variables
@@ -72,11 +75,21 @@ class CobradorCubit extends Cubit<CobradorState> {
         AppDialogUtil.error(state.context, message: l.props[0].toString());
       },
       (r) {
-        emit(state.copyWith(cobradores: r.data));
         Shared.setCobradores = r.data;
+        emit(state.copyWith(cobradores: r.data));
       },
     );
 
+    emit(state.copyWith(loading: false));
+  }
+
+  void listarRuta() async {
+    if (Shared.getRutas != null) return;
+    emit(state.copyWith(loading: true));
+    final r = await _rutaRepo.listar();
+    r.fold((l) {}, (r) {
+      Shared.setRutas = r.data;
+    });
     emit(state.copyWith(loading: false));
   }
 

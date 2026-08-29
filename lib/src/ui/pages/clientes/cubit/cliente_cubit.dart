@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/get_it.dart';
 import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
+import 'package:personal/src/common/utils/update_util.dart';
 import 'package:personal/src/domain/dto/crear_cliente_dto.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
@@ -105,6 +106,8 @@ class ClienteCubit extends Cubit<ClienteState> {
         cedula: ideTxt.text.trim(),
         telefono: contactTxt.text.trim(),
         whatsapp: whatsappTxt.text.trim(),
+        barrio: barrioTxt.text,
+        observacion: observationTxt.text,
         direccion: addressDescriptionTxt.text.trim(),
         descripcionDireccion: observationTxt.text.trim(),
       ),
@@ -126,12 +129,74 @@ class ClienteCubit extends Cubit<ClienteState> {
   }
 
   void listarRuta() async {
-    if (Shared.getRutas == null) {
-      final r = await _rutaRepo.listar();
-      r.fold((l) {}, (r) {
-        Shared.setRutas = r.data;
-      });
+    if (Shared.getRutas != null) return;
+    final r = await _rutaRepo.listar();
+    r.fold((l) {}, (r) {
+      Shared.setRutas = r.data;
+    });
+  }
+
+  void editarCliente() async {
+    emit(state.copyWith(loadingBtn: true));
+
+    final cliente = state.cliente;
+
+    if (cliente == null) {
+      emit(state.copyWith(loadingBtn: false));
+      return;
     }
+
+    final dto = CrearClienteDto(
+      rutaId: UpdateUtil.valorModificado(cliente.rutaId, state.ruta?.id),
+
+      nombres: UpdateUtil.valorModificado(cliente.nombres, nameTxt.text.trim()),
+
+      apellidos: UpdateUtil.valorModificado(
+        cliente.apellidos,
+        lastNameTxt.text.trim(),
+      ),
+
+      cedula: UpdateUtil.valorModificado(cliente.cedula, ideTxt.text.trim()),
+
+      telefono: UpdateUtil.valorModificado(
+        cliente.telefono,
+        contactTxt.text.trim(),
+      ),
+
+      whatsapp: UpdateUtil.valorModificado(
+        cliente.whatsapp,
+        whatsappTxt.text.trim(),
+      ),
+
+      direccion: UpdateUtil.valorModificado(
+        cliente.direccion,
+        addressDescriptionTxt.text.trim(),
+      ),
+
+      descripcionDireccion: UpdateUtil.valorModificado(
+        cliente.descripcionDireccion,
+        observationTxt.text.trim(),
+      ),
+    );
+
+    final r = await _clienteRepo.editar(dto: dto, id: state.cliente!.id);
+
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        AppDialogUtil.success(
+          state.context,
+          message: "Cliente editado con éxito.",
+        );
+
+        listClientes();
+        setChild(ClientHome());
+      },
+    );
+
+    emit(state.copyWith(loadingBtn: false));
   }
 
   void detalleCliente(String id) async {
@@ -174,7 +239,7 @@ class ClienteCubit extends Cubit<ClienteState> {
     final c = state.cliente!;
     nameTxt.text = c.nombres;
     lastNameTxt.text = c.apellidos;
-    ideTxt.text = c.direccion;
+    ideTxt.text = c.cedula;
     contactTxt.text = c.telefono;
     whatsappTxt.text = c.whatsapp;
     directionTxt.text = c.direccion;

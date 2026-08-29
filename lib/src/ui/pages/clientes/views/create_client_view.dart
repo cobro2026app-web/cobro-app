@@ -242,6 +242,7 @@ class CreateClientView extends StatelessWidget {
                     onPressed: state.btnEnabled
                         ? () {
                             if (isEdit) {
+                              c.editarCliente() ;              
                             } else {
                               c.crearCliente();
                             }
