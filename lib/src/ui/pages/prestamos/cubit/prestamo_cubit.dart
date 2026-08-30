@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
@@ -175,6 +174,21 @@ class PrestamoCubit extends Cubit<PrestamoState> {
       },
       (r) {
         emit(state.copyWith(prestamos: r.data));
+      },
+    );
+    emit(state.copyWith(loading: false));
+  }
+
+  void detallePrestamo(String id) async {
+    emit(state.copyWith(loading: true));
+    final r = await _prestamosRepo.detallePrestamo(id: id);
+
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        emit(state.copyWith(prestamo: r));
       },
     );
     emit(state.copyWith(loading: false));

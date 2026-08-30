@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
 import 'package:personal/src/ui/pages/prestamos/cubit/prestamo_cubit.dart';
 import 'package:personal/src/ui/pages/prestamos/views/cobrar.dart';
+import 'package:personal/src/ui/pages/prestamos/views/prestamo_detalle_view.dart';
 
 class PrestamoCardView extends StatelessWidget {
   const PrestamoCardView({
@@ -133,7 +134,18 @@ class PrestamoCardView extends StatelessWidget {
                 ),
               ),
 
-              const Icon(Icons.chevron_right_rounded, color: Color(0xFF9AA2AF)),
+              IconButton(
+                icon: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Color(0xFF9AA2AF),
+                ),
+                onPressed: () {
+                  context.read<PrestamoCubit>().detallePrestamo(id);
+                  context.read<PrestamoCubit>().onGetChild(
+                    PrestamoDetalleView(),
+                  );
+                },
+              ),
             ],
           ),
 
@@ -170,15 +182,20 @@ class PrestamoCardView extends StatelessWidget {
                       cuota: int.parse(installment.replaceAll("\$", "")),
                       deudaActual: int.parse(amount.replaceAll("\$", "")),
                       onConfirmar: () async {
-                        context.read<HomeCubit>().pagar(
-                          id: id,
-                          monto: int.parse(installment.replaceAll("\$", "")),
-                        ).then((e){
-                              if(e){
+                        context
+                            .read<HomeCubit>()
+                            .pagar(
+                              id: id,
+                              monto: int.parse(
+                                installment.replaceAll("\$", ""),
+                              ),
+                            )
+                            .then((e) {
+                              if (e) {
                                 // ignore: use_build_context_synchronously
                                 context.read<PrestamoCubit>().listarPrestamo();
                               }
-                        });
+                            });
                       },
                     );
                   },

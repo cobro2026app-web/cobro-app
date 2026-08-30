@@ -32,21 +32,24 @@ class ClientHome extends StatelessWidget {
                     child: Center(child: CircularProgressIndicator.adaptive())),
                   const SizedBox(height: 18),
 
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Text(
-                          '6 clientes encontrados',
-                          style: TextStyle(
-                            color: Color(0xFF929BAB),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
+                  Visibility(
+                    visible: !state.loading,
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            '6 clientes encontrados',
+                            style: TextStyle(
+                              color: Color(0xFF929BAB),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-
-                      FilterClientView(),
-                    ],
+                    
+                        FilterClientView(),
+                      ],
+                    ),
                   ),
 
                   const SizedBox(height: 12),

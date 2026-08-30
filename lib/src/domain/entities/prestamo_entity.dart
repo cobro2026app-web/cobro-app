@@ -1,4 +1,5 @@
 import 'package:personal/src/data/model/cliente_model.dart';
+import 'package:personal/src/domain/entities/pago_entity.dart';
 
 class PrestamoEntity {
   final bool exito;
@@ -27,6 +28,7 @@ class DatumPEntity {
   final DateTime updatedAt;
   final DatumClModel cliente;
   final List<FechasPagoPEntity> fechasPago;
+final List<PagoEntity> pagos;
 
   DatumPEntity({
     required this.id,
@@ -47,6 +49,7 @@ class DatumPEntity {
     required this.fechasPago,
     required this.cliente,
     required this.deudaActual,
+    required this.pagos,
   });
 }
 

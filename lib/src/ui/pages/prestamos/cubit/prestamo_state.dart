@@ -13,6 +13,7 @@ class PrestamoState extends Equatable {
   final bool loadingBtn;
   final List<DateTime>? fechasPago;
   final List<DatumPEntity>? prestamos;
+  final DatumPEntity? prestamo;
   const PrestamoState({
     required this.context,
     this.child = const SizedBox(),
@@ -25,7 +26,8 @@ class PrestamoState extends Equatable {
     this.loading = false,
     this.isPrevious = false,
     this.loadingBtn = false,
-    this.prestamos
+    this.prestamos,
+    this.prestamo,
   });
 
   @override
@@ -41,7 +43,8 @@ class PrestamoState extends Equatable {
     loading,
     isPrevious,
     loadingBtn,
-     prestamos
+    prestamos,
+    prestamo,
   ];
   PrestamoState copyWith({
     BuildContext? context,
@@ -55,7 +58,8 @@ class PrestamoState extends Equatable {
     bool? loading,
     bool? isPrevious,
     bool? loadingBtn,
-     List<DatumPEntity>? prestamos,
+    List<DatumPEntity>? prestamos,
+    DatumPEntity? prestamo,
   }) => PrestamoState(
     context: context ?? this.context,
     listClientes: listClientes ?? this.listClientes,
@@ -68,6 +72,7 @@ class PrestamoState extends Equatable {
     loading: loading ?? this.loading,
     isPrevious: isPrevious ?? this.isPrevious,
     loadingBtn: loadingBtn ?? this.loadingBtn,
-    prestamos: prestamos ?? this.prestamos
+    prestamos: prestamos ?? this.prestamos,
+    prestamo: prestamo ?? this.prestamo,
   );
 }
