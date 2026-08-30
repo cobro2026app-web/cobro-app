@@ -17,34 +17,42 @@ class CobradorHome extends StatelessWidget {
           children: [
             HeaderCCiew(),
 
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
-                children: [
-                  SectionHeaderCView(),
+            Visibility(
+              visible: !state.loading,
+              child: Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+                  children: [
+                    SectionHeaderCView(),
 
-                  ...state.cobradores!.map(
-                    (c) => Container(
-                      margin: const EdgeInsets.only(bottom: 14),
-                      child: CollectCardCView(
-                        name: c.nombre,
-                        phone: c.telefono,
-                        id: c.id,
-                        route:
-                            Shared.getRutas!
-                                .where((e) => e.cobrador?.id == c.id)
-                                .map((e) => e.nombre)
-                                .firstOrNull ??
-                            'Sin ruta',
+                    ...state.cobradores!.map(
+                      (c) => Container(
+                        margin: const EdgeInsets.only(bottom: 14),
+                        child: CollectCardCView(
+                          name: c.nombre,
+                          phone: c.telefono,
+                          id: c.id,
+                          route:
+                              Shared.getRutas!
+                                  .where((e) => e.cobrador?.id == c.id)
+                                  .map((e) => e.nombre)
+                                  .firstOrNull ??
+                              'Sin ruta',
 
-                        clients: 18,
-                        collected: '\$3.100.000',
-                        avatar: '👩‍💼',
-                        active: true,
+                          clients:
+                              Shared.getRutas!
+                                  .where((e) => e.cobrador?.id == c.id)
+                                  .map((e) => e.cantidadClientes)
+                                  .firstOrNull ??
+                              0,
+                          collected: '\$ 0',
+                          avatar: '👩‍💼',
+                          active: true,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
