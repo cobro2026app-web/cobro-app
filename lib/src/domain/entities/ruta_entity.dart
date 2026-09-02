@@ -17,6 +17,7 @@ class DatumREntity {
     final String id;
     final String nombre;
     final String descripcion;
+    final int capital;
     final bool habilitada;
     final DatumCEntity? cobrador;
     final int cantidadClientes;
@@ -28,6 +29,7 @@ class DatumREntity {
         required this.nombre,
         required this.descripcion,
         required this.habilitada,
+        required this.capital,
         required this.cobrador,
         required this.cantidadClientes,
         required this.createdAt,

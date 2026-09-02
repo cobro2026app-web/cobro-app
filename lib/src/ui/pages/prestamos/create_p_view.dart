@@ -428,7 +428,8 @@ class _ClientSelector extends StatelessWidget {
         final cubit = context.read<PrestamoCubit>();
         return GestureDetector(
           onTap: () async {
-            final clientes = context.read<HomeCubit>().state.clientes ?? [];
+            if(Shared.getIdClient.isNotEmpty)return ;
+            final clientes = Shared.getClientes ?? [];
             final seleccionado = await showSearch<DatumClEntity?>(
               context: context,
               delegate: ClienteSearchDelegate(clientes),
@@ -518,7 +519,9 @@ class _ClientSelected extends StatelessWidget {
             ],
           ),
         ),
-        const Icon(Icons.edit_outlined, size: 19, color: Color(0xFF8A93A3)),
+         Visibility(
+          visible: Shared.getIdClient.isEmpty,
+          child: Icon(Icons.edit_outlined, size: 19, color: Color(0xFF8A93A3))),
       ],
     );
   }

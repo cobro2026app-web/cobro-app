@@ -142,10 +142,20 @@ class PrestamoDetalleView extends StatelessWidget {
 
           const SizedBox(height: 15),
 
+          _moneyRow(label: 'Monto prestado ', value: '\$ ${pEntity.monto}'),
+          const SizedBox(height: 15),
+
           _moneyRow(label: 'Total a pagar', value: '\$ ${pEntity.totalPagar}'),
 
           const SizedBox(height: 12),
 
+          _moneyRow(
+            label: 'Ganancia esperada',
+            value: '\$ ${pEntity.montoInteres}',
+          ),
+          Divider(),
+
+          const SizedBox(height: 12),
           _moneyRow(
             label: 'Total pagado',
             value: '\$ ${pEntity.totalPagar - pEntity.deudaActual}',

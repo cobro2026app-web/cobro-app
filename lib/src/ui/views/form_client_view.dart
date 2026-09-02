@@ -54,19 +54,6 @@ class _FormClientViewState extends State<FormClientView> {
     _loadInfo();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    nameTxt.dispose();
-    lastNameTxt.dispose();
-    contactTxt.dispose();
-    barrioTxt.dispose();
-    directionTxt.dispose();
-    ideTxt.dispose();
-    whatsappTxt.dispose();
-    contactTxt.dispose();
-  }
-
   void _loadInfo() {
     if (widget.isEdit) {
       final c = widget.cliente!;
@@ -427,6 +414,7 @@ class _FormClientViewState extends State<FormClientView> {
       whatsappTxt,
       directionTxt,
       barrioTxt,
+      observationTxt,
     ].every((text) => text.text.trim().isNotEmpty);
 
     btnEnabled = checkEnabled && ruta != null;

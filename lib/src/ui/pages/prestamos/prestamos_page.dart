@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
+import 'package:personal/src/ui/pages/prestamos/create_p_view.dart';
 import 'package:personal/src/ui/pages/prestamos/cubit/prestamo_cubit.dart';
 
 class PrestamosPage extends StatefulWidget {
@@ -16,6 +18,18 @@ class _PrestamosPageState extends State<PrestamosPage> {
     super.initState();
     _cubit = PrestamoCubit(context);
     _cubit.listarPrestamo();
+    _asignarPrestamo();
+  }
+
+  void _asignarPrestamo() async {
+    if (mounted) {
+      final c = context.read<HomeCubit>().state;
+      if (c.asignarPrestamo) {
+        await _cubit.clinteId();
+        _cubit.onEventListClient(true);
+        _cubit.onGetChild(CrearPrestamoView());
+      }
+    }
   }
 
   @override

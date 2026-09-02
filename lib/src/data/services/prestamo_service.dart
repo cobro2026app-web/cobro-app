@@ -6,6 +6,7 @@ import 'package:personal/src/domain/dto/crear_prestamo_dto.dart';
 
 abstract class PrestamoService {
   Future<dynamic> crear({required CrearPrestamoDto dto});
+  Future<dynamic> crearHistorico({required CrearPrestamoDto dto});
   Future<PrestamoModel> listar();
   Future<DatumPModel> detallePrestamo({required String id});
 }
@@ -19,6 +20,18 @@ class PrestamoServiceImpl implements PrestamoService {
   Future<dynamic> crear({required CrearPrestamoDto dto}) async {
     try {
       await apiClient.dio.post('/prestamo', data: dto.toJson());
+      return true;
+    } on DioException catch (e) {
+      throw ServerExceptions(message: e.response!.data["message"]);
+    } catch (e) {
+      throw Exception("Error inesperado");
+    }
+  }
+
+  @override
+  Future<dynamic> crearHistorico({required CrearPrestamoDto dto}) async {
+    try {
+      await apiClient.dio.post('/pago/historico', data: dto.toJson());
       return true;
     } on DioException catch (e) {
       throw ServerExceptions(message: e.response!.data["message"]);

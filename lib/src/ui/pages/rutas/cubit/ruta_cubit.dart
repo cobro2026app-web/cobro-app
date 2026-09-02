@@ -174,12 +174,16 @@ class RutaCubit extends Cubit<RutaState> {
     descripcionRuta.value = descripcionRuta.value.copyWith(
       text: ruta.descripcion,
     );
+
+    capital.value = capital.value.copyWith(text: ruta.capital.toString());
+
     emit(state.copyWith(cobrador: ruta.cobrador));
   }
 
   void clear() {
     nombreRuta.clear();
     descripcionRuta.clear();
+    capital.clear();
     emit(state.copyWith(limpiarCobrador: true));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:personal/src/domain/dto/pago_dto.dart';
 import 'package:personal/src/domain/dto/prestamo_fecha_dto.dart';
 
 class CrearPrestamoDto {
@@ -11,6 +12,7 @@ class CrearPrestamoDto {
   final String fechaInicio;
   final String fechaFin;
   final List<PrestamoFechaDto>? fechas;
+  final List<PagoDto>? pagos;
 
   CrearPrestamoDto({
     required this.clienteId,
@@ -23,10 +25,11 @@ class CrearPrestamoDto {
     required this.fechaInicio,
     required this.fechaFin,
     this.fechas,
+    this.pagos,
   });
 
   Map<String, dynamic> toJson() {
-    return {
+    final json = {
       'clienteId': clienteId,
       'monto': monto,
       'interes': interes,
@@ -37,6 +40,11 @@ class CrearPrestamoDto {
       'fechaInicio': fechaInicio,
       'fechaFin': fechaFin,
       'fechas': fechas?.map((e) => e.toJson()).toList(),
+      'pagos': pagos?.map((e) => e.toJson()).toList(),
     };
+
+    json.removeWhere((key, value) => value == null);
+
+    return json;
   }
 }

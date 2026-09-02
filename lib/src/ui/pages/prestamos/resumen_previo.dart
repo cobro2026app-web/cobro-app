@@ -6,12 +6,10 @@ import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/domain/dto/cuota_esperada_dto.dart';
 import 'package:personal/src/ui/pages/prestamos/create_p_view.dart';
 import 'package:personal/src/ui/pages/prestamos/cubit/prestamo_cubit.dart';
+import 'package:personal/src/ui/widgets/widgets.dart';
 
 class ResumenPrevio extends StatefulWidget {
-  const ResumenPrevio({
-    super.key,
-    required this.cuotas,
-  });
+  const ResumenPrevio({super.key, required this.cuotas});
 
   final List<CuotaEsperada> cuotas;
 
@@ -103,23 +101,19 @@ class _ResumenPrevioState extends State<ResumenPrevio> {
           child: SizedBox(
             width: double.infinity,
             height: 54,
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.check_rounded, color: Colors.white),
-              label: const Text(
-                'Confirmar y crear préstamo',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 15,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
+
+            child: BlocBuilder<PrestamoCubit, PrestamoState>(
+              builder: (context, state) {
+                return BtnWidget.btn(
+                  enabled: true,
+                  loading: state.loadingBtn,
+                  text: "Confirmar y crear préstamo",
+                  onPressed: () {
+                    context.read<PrestamoCubit>().crearPrestamoExistente();
+                  },
+                  icon: Icons.check_rounded,
+                );
+              },
             ),
           ),
         ),

@@ -7,6 +7,7 @@ import 'package:personal/src/common/utils/app_dialog_util.dart';
 import 'package:personal/src/common/utils/date_util.dart';
 import 'package:personal/src/domain/dto/crear_prestamo_dto.dart';
 import 'package:personal/src/domain/dto/cuota_esperada_dto.dart';
+import 'package:personal/src/domain/dto/pago_dto.dart';
 import 'package:personal/src/domain/dto/prestamo_fecha_dto.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/domain/entities/config_entity.dart';
@@ -69,19 +70,18 @@ class PrestamoCubit extends Cubit<PrestamoState> {
     emit(state.copyWith(isPrevious: !state.isPrevious));
   }
 
+  void onEventListClient(bool e) {
+    emit(state.copyWith(listClientes: e));
+  }
+
   ///Peticioness
   ///
   ///
   void listarClientes() async {
     emit(state.copyWith(loading: true));
-    if (state.listClientes) {
-      final homeC = state.context.read<HomeCubit>();
-      if (homeC.state.clientes == null || homeC.state.clientes!.isEmpty) {
-        final r = await _clientRep.listar();
-        r.fold((l) {}, (r) {
-          homeC.onGetClients(r.data);
-        });
-      }
+    if (Shared.getClientes == null || Shared.getClientes!.isEmpty) {
+      final r = await _clientRep.listar();
+      r.fold((l) {}, (r) {});
     }
     emit(state.copyWith(loading: false));
   }
@@ -163,6 +163,84 @@ class PrestamoCubit extends Cubit<PrestamoState> {
     emit(state.copyWith(loadingBtn: false));
   }
 
+  void crearPrestamoExistente() async {
+    emit(state.copyWith(loadingBtn: true));
+
+    final interes =
+        (int.parse(montoController.text) *
+                (int.parse(interesController.text) / 100))
+            .toInt();
+    final cuota =
+        ((int.parse(montoController.text) + interes) /
+                state.periodoSeleccionado!.cuotas!)
+            .toInt();
+    final r = await _prestamosRepo.crearHistorico(
+      dto: CrearPrestamoDto(
+        clienteId: state.cliente!.id,
+        monto: int.parse(montoController.text),
+        interes: int.parse(interesController.text),
+        numeroCuotas: state.periodoSeleccionado!.cuotas!,
+        montoInteres: interes,
+        valorCuota: cuota,
+        frecuencia: state.periodoSeleccionado!.codigo!,
+        fechaInicio: DateUtil.formatDate(state.fechaInicial!),
+        fechaFin: DateUtil.formatDate(state.fechaFinal!),
+        pagos: state.cuotaEsperada!
+            .where((e) => e.esPasada)
+            .map(
+              (e) => PagoDto(
+                prestamoId: "",
+                valor: e.monto.toInt(),
+                fechaPago: e.fechaCobro,
+              ),
+            )
+            .toList(),
+        fechas:
+            state.periodoSeleccionado!.codigo == "SEMANAL" ||
+                state.periodoSeleccionado!.codigo == "QUINCENAL"
+            ? state.fechasPago!
+                  .asMap()
+                  .entries
+                  .map(
+                    (entry) => PrestamoFechaDto(
+                      fechaPago: DateUtil.formatDate(entry.value),
+                      numero: entry.key + 1,
+                      valor: cuota,
+                    ),
+                  )
+                  .toList()
+            : [],
+      ),
+    );
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        AppDialogUtil.success(
+          state.context,
+          message: "Prestamo creado con éxito.",
+        );
+        state.context.read<HomeCubit>().onCurrenteIndex(2);
+        state.context.read<HomeCubit>().onCurrenteIndex(3);
+        onGetChild(PrestamosHome());
+        listarPrestamo();
+        emit(state.copyWith(cliente: null, periodoSeleccionado: null));
+        montoController.clear();
+      },
+    );
+    emit(state.copyWith(loadingBtn: false));
+  }
+
+  Future<void> clinteId() async {
+    emit(state.copyWith(loading: true));
+    final r = await _clientRep.obtenerCliente(id: Shared.getIdClient);
+    r.fold((l) {}, (r) {
+      emit(state.copyWith(cliente: r));
+    });
+    emit(state.copyWith(loading: false));
+  }
+
   void listarPrestamo() async {
     emit(state.copyWith(loading: true));
     final r = await _prestamosRepo.listar();
@@ -238,6 +316,7 @@ class PrestamoCubit extends Cubit<PrestamoState> {
     // 4. Mostrar resumen
     // ─────────────────────────────────────────────
 
+    emit(state.copyWith(cuotaEsperada: cuotas));
     onGetChild(ResumenPrevio(cuotas: cuotas));
   }
 
@@ -375,5 +454,10 @@ class PrestamoCubit extends Cubit<PrestamoState> {
         monto: monto.toDouble(),
       );
     }).toList();
+  }
+
+  void clear() {
+    emit(state.copyWith(limpiarCliente: true, limpiarPeriodo: true));
+    montoController.clear();
   }
 }

@@ -67,7 +67,7 @@ class ClienteCubit extends Cubit<ClienteState> {
       },
       (r) {
         emit(state.copyWith(clientes: r.data));
-        state.context.read<HomeCubit>().onGetClients(r.data);
+        Shared.setClientes= r.data;
       },
     );
     emit(state.copyWith(loading: false));
@@ -83,12 +83,16 @@ class ClienteCubit extends Cubit<ClienteState> {
       (r) {
         AppDialogUtil.success(
           state.context,
-          message: "Cliente creado con éxito.",
+          message: "Cliente creado con éxito.\n¿Desea asignar préstamo?",
+          buttonText: "Asignar",
         );
-        listClientes();
-        setChild(ClientHome());
+        listClientes(); 
+        state.context.read<HomeCubit>().onCurrenteIndex(3);
+        state.context.read<HomeCubit>().onAsignarPrestamo(true);
+        Shared.setIdCliente= r;
       },
     );
+
     emit(state.copyWith(loadingBtn: false));
   }
 

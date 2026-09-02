@@ -5,6 +5,7 @@ class PagoEntity {
   final num valor;
   final String estado;
   final DateTime? fechaReversion;
+  final DateTime? fechaPago;
   final String? usuarioReversionId;
   final String? motivoReversion;
   final DateTime createdAt;
@@ -17,6 +18,7 @@ class PagoEntity {
     required this.valor,
     required this.estado,
     this.fechaReversion,
+    this.fechaPago,
     this.usuarioReversionId,
     this.motivoReversion,
     required this.createdAt,

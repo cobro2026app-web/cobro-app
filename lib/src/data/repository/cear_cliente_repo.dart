@@ -27,7 +27,7 @@ class ClienteRepoImpl implements ClienteRepository {
   }
 
   @override
-  Future<Either<Failure, dynamic>> crear({required CrearClienteDto dto}) async {
+  Future<Either<Failure, String>> crear({required CrearClienteDto dto}) async {
     try {
       final response = await clienteService.crear(dto: dto);
 

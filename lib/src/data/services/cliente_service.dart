@@ -8,7 +8,7 @@ abstract class ClienteService {
   Future<ClienteModel> listar();
   Future<ClienteModel> buscar({required String q});
 
-  Future<dynamic> crear({required CrearClienteDto dto});
+  Future<String> crear({required CrearClienteDto dto});
   Future<dynamic> editar({required CrearClienteDto dto, required String id});
   Future<DatumClModel> obtenerCliente({required String id});
 }
@@ -32,11 +32,11 @@ class ClienteServiceImpl implements ClienteService {
   }
 
   @override
-  Future<dynamic> crear({required CrearClienteDto dto}) async {
+  Future<String> crear({required CrearClienteDto dto}) async {
     try {
       final response = await apiClient.dio.post('/cliente', data: dto.toJson());
 
-      return response.data;
+      return response.data["data"]["id"];
     } on DioException catch (e) {
       throw ServerExceptions(message: e.response!.data["message"]);
     } catch (e) {

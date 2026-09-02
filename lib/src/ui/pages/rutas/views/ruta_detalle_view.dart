@@ -5,6 +5,7 @@ import 'package:personal/src/domain/entities/detalle_ruta_entity.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
 import 'package:personal/src/ui/pages/rutas/cubit/ruta_cubit.dart';
 import 'package:personal/src/ui/pages/rutas/views/ruta_home.dart';
+import 'package:personal/src/ui/views/detalle_cliente_view.dart';
 
 class RutaDetalleView extends StatefulWidget {
   final DatumREntity ruta;
@@ -174,13 +175,25 @@ class _RutaDetalleViewState extends State<RutaDetalleView> {
                           : widget.ruta.descripcion,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white70),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+
+                    Text(
+                      "Capital: \$ ${widget.ruta.capital}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
               ),
-
-              _status(widget.ruta.habilitada),
             ],
           ),
 
@@ -258,42 +271,6 @@ class _RutaDetalleViewState extends State<RutaDetalleView> {
     );
   }
 
-  Widget _status(bool activa) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-      decoration: BoxDecoration(
-        color: activa
-            ? Colors.green.withValues(alpha: .15)
-            : Colors.red.withValues(alpha: .15),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              color: activa ? Colors.green : Colors.red,
-              shape: BoxShape.circle,
-            ),
-          ),
-
-          const SizedBox(width: 5),
-
-          Text(
-            activa ? 'Activa' : 'Inactiva',
-            style: TextStyle(
-              color: activa ? Colors.green : Colors.red,
-              fontSize: 9,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _clienteCard(DetalleRutaEntity c) {
     final cliente = c.cliente;
     final nombre = '${cliente.nombres} ${cliente.apellidos}'.trim();
@@ -362,8 +339,29 @@ class _RutaDetalleViewState extends State<RutaDetalleView> {
               ],
             ),
           ),
-
-          const Icon(Icons.chevron_right_rounded, color: Color(0xFFB3B9C3)),
+          BlocBuilder<RutaCubit, RutaState>(
+            builder: (context, state) {
+              final c = context.read<RutaCubit>();
+              return IconButton(
+                onPressed: () {
+                  c.onEventChild(
+                    DetalleClienteView(
+                      cliente: cliente,
+                      onBack: () {
+                        c.onEventChild(RutaHome());
+                      },
+                      onEdit: () {},
+                      showEdit: false,
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.chevron_right_rounded,
+                  color: Color(0xFFB3B9C3),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

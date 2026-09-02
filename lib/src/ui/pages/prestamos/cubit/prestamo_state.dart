@@ -13,6 +13,7 @@ class PrestamoState extends Equatable {
   final bool loadingBtn;
   final List<DateTime>? fechasPago;
   final List<DatumPEntity>? prestamos;
+  final List<CuotaEsperada>? cuotaEsperada;
   final DatumPEntity? prestamo;
   const PrestamoState({
     required this.context,
@@ -28,6 +29,7 @@ class PrestamoState extends Equatable {
     this.loadingBtn = false,
     this.prestamos,
     this.prestamo,
+    this.cuotaEsperada,
   });
 
   @override
@@ -45,6 +47,7 @@ class PrestamoState extends Equatable {
     loadingBtn,
     prestamos,
     prestamo,
+    cuotaEsperada
   ];
   PrestamoState copyWith({
     BuildContext? context,
@@ -60,12 +63,17 @@ class PrestamoState extends Equatable {
     bool? loadingBtn,
     List<DatumPEntity>? prestamos,
     DatumPEntity? prestamo,
+    bool limpiarCliente = false,
+    bool limpiarPeriodo = false,
+    List<CuotaEsperada>? cuotaEsperada,
   }) => PrestamoState(
     context: context ?? this.context,
     listClientes: listClientes ?? this.listClientes,
     child: child ?? this.child,
-    cliente: cliente ?? this.cliente,
-    periodoSeleccionado: periodoSeleccionado ?? this.periodoSeleccionado,
+    cliente: limpiarCliente ? null : cliente ?? this.cliente,
+    periodoSeleccionado: limpiarPeriodo
+        ? null
+        : periodoSeleccionado ?? this.periodoSeleccionado,
     fechaInicial: fechaInicial ?? this.fechaInicial,
     fechaFinal: fechaFinal ?? this.fechaFinal,
     fechasPago: fechasPago ?? this.fechasPago,
@@ -74,5 +82,6 @@ class PrestamoState extends Equatable {
     loadingBtn: loadingBtn ?? this.loadingBtn,
     prestamos: prestamos ?? this.prestamos,
     prestamo: prestamo ?? this.prestamo,
+    cuotaEsperada: cuotaEsperada ?? this.cuotaEsperada
   );
 }

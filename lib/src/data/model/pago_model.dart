@@ -8,6 +8,7 @@ class PagoModel extends PagoEntity {
     required super.valor,
     required super.estado,
     super.fechaReversion,
+    super.fechaPago,
     super.usuarioReversionId,
     super.motivoReversion,
     required super.createdAt,
@@ -23,6 +24,9 @@ class PagoModel extends PagoEntity {
       estado: json['estado'] ?? '',
       fechaReversion: json['fechaReversion'] != null
           ? DateTime.tryParse(json['fechaReversion'].toString())
+          : null,
+      fechaPago: json['fechaPago'] != null
+          ? DateTime.tryParse(json['fechaPago'].toString())
           : null,
       usuarioReversionId: json['usuarioReversionId'],
       motivoReversion: json['motivoReversion'],

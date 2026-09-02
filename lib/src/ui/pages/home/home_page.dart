@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/ui/pages/clientes/cliente_page.dart';
 import 'package:personal/src/ui/pages/cobradores/cobrador_page.dart';
 import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
@@ -42,6 +43,8 @@ class HomePage extends StatelessWidget {
                     ? (index) {}
                     : (index) {
                         context.read<HomeCubit>().onCurrenteIndex(index);
+                        context.read<HomeCubit>().onAsignarPrestamo(false);
+                        Shared.setIdCliente = "";
                       },
               ),
             ),

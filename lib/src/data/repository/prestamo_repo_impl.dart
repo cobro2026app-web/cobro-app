@@ -26,6 +26,22 @@ class PrestamoRepoImpl implements PresamoRepo {
       return Left(failure);
     }
   }
+  @override
+  Future<Either<Failure, dynamic>> crearHistorico({
+    required CrearPrestamoDto dto,
+  }) async {
+    try {
+      final response = await prestamoService.crearHistorico(dto: dto);
+
+      return Right(response);
+    } on ServerExceptions catch (e) {
+      final failure = ServerFailure(message: e.message);
+      return Left(failure);
+    } catch (e) {
+      final failure = ServerFailure(message: "Error inesperado: $e");
+      return Left(failure);
+    }
+  }
 
   @override
   Future<Either<Failure, PrestamoEntity>> listar() async {

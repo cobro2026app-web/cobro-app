@@ -31,9 +31,11 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(currentIndex: index));
   }
 
-  void onGetClients(List<DatumClEntity> c) {
-    emit(state.copyWith(clientes: c));
+  void onAsignarPrestamo(bool e) {
+    emit(state.copyWith(asignarPrestamo: e));
   }
+
+
 
   void setLoadPay(bool e) {
     emit(state.copyWith(loadPay: e));

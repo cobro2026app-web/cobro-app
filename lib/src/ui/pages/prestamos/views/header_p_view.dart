@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/ui/pages/prestamos/create_p_view.dart';
 import 'package:personal/src/ui/pages/prestamos/cubit/prestamo_cubit.dart';
@@ -41,6 +42,8 @@ class HeaderPView extends StatelessWidget {
 
                   GestureDetector(
                     onTap: () {
+                      Shared.setIdCliente = "";
+                      context.read<PrestamoCubit>().clear();
                       context.read<PrestamoCubit>().onGetChild(
                         CrearPrestamoView(),
                       );
