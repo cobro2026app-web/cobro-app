@@ -457,7 +457,14 @@ class PrestamoCubit extends Cubit<PrestamoState> {
   }
 
   void clear() {
-    emit(state.copyWith(limpiarCliente: true, limpiarPeriodo: true));
+    emit(
+      state.copyWith(
+        limpiarCliente: true,
+        limpiarPeriodo: true,
+        isPrevious: false,
+        fechaInicial: DateTime.now(),
+      ),
+    );
     montoController.clear();
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
+import 'package:personal/src/ui/pages/caja/caja_page.dart';
 import 'package:personal/src/ui/pages/rutas/cubit/ruta_cubit.dart';
 import 'package:personal/src/ui/pages/rutas/views/crear_ruta_view.dart';
 import 'package:personal/src/ui/pages/rutas/views/ruta_detalle_view.dart';
@@ -258,6 +259,25 @@ class _RutaHomeState extends State<RutaHome> {
                       _handleMenu(value, ruta);
                     },
                     itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 'abrir',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => CajaPage()),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.account_balance_wallet_outlined,
+                              size: 18,
+                            ),
+                            SizedBox(width: 10),
+                            Text('Gestión caja'),
+                          ],
+                        ),
+                      ),
                       PopupMenuItem(
                         value: 'ver',
                         onTap: () {
