@@ -13,6 +13,7 @@ class CobradorHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CobradorCubit, CobradorState>(
       builder: (context, state) {
+        final cobradores = state.cobradores ??[];
         return Column(
           children: [
             HeaderCCiew(),
@@ -25,7 +26,7 @@ class CobradorHome extends StatelessWidget {
                   children: [
                     SectionHeaderCView(),
 
-                    ...state.cobradores!.map(
+                    ...cobradores.map(
                       (c) => Container(
                         margin: const EdgeInsets.only(bottom: 14),
                         child: CollectCardCView(

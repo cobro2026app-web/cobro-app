@@ -14,30 +14,6 @@ class RutaHome extends StatefulWidget {
 }
 
 class _RutaHomeState extends State<RutaHome> {
-  final List<RutaModel> rutas = [
-    RutaModel(
-      nombre: 'Ruta Centro',
-      descripcion: 'Zona centro y alrededores',
-      cobrador: 'Carlos Pérez',
-      clientes: 18,
-      activa: true,
-    ),
-    RutaModel(
-      nombre: 'Ruta Norte',
-      descripcion: 'Barrio La Granja y sectores cercanos',
-      cobrador: 'Juan Martínez',
-      clientes: 25,
-      activa: true,
-    ),
-    RutaModel(
-      nombre: 'Ruta Sur',
-      descripcion: 'Zona sur de la ciudad',
-      cobrador: 'Pedro Gómez',
-      clientes: 12,
-      activa: false,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,81 +60,86 @@ class _RutaHomeState extends State<RutaHome> {
   // ============================================================
 
   Widget _header() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(18),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              AppTheme.primaryColor,
-              AppTheme.primaryColor.withValues(alpha: .80),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: .15),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: const Icon(
-                Icons.route_outlined,
-                color: Colors.white,
-                size: 28,
-              ),
-            ),
-
-            const SizedBox(width: 14),
-
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Gestión de rutas',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-
-                  const SizedBox(height: 4),
-
-                  Text(
-                    '${rutas.length} rutas configuradas',
-                    style: const TextStyle(color: Colors.white70, fontSize: 11),
-                  ),
+    return BlocBuilder<RutaCubit, RutaState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppTheme.primaryColor,
+                  AppTheme.primaryColor.withValues(alpha: .80),
                 ],
               ),
+              borderRadius: BorderRadius.circular(20),
             ),
-
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: .15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                '${rutas.where((e) => e.activa).length} activas',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
+            child: Row(
+              children: [
+                Container(
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: .15),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: const Icon(
+                    Icons.route_outlined,
+                    color: Colors.white,
+                    size: 28,
+                  ),
                 ),
-              ),
+
+                const SizedBox(width: 14),
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Gestión de rutas',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+
+                      const SizedBox(height: 4),
+
+                      Text(
+                        '${state.rutas!.length} rutas configuradas',
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 7,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: .15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '${state.rutas!.where((e) => e.habilitada).length} activas',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -378,10 +359,7 @@ class _RutaHomeState extends State<RutaHome> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(color: Color(0xFF929BAB), fontSize: 9),
-                ),
+                Text(title, style: const TextStyle(color: Color(0xFF929BAB))),
 
                 const SizedBox(height: 2),
 
@@ -391,7 +369,6 @@ class _RutaHomeState extends State<RutaHome> {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Color(0xFF394354),
-                    fontSize: 10,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -449,20 +426,6 @@ class _RutaHomeState extends State<RutaHome> {
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Color(0xFF929BAB), fontSize: 11),
                 ),
-
-                const SizedBox(height: 20),
-
-                ElevatedButton.icon(
-                  onPressed: () {
-                    context.read<RutaCubit>().onEventChild(CrearRutaView());
-                  },
-                  icon: const Icon(Icons.add_rounded),
-                  label: const Text('Crear ruta'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppTheme.primaryColor,
-                    foregroundColor: Colors.white,
-                  ),
-                ),
               ],
             ),
           ),
@@ -482,11 +445,9 @@ class _RutaHomeState extends State<RutaHome> {
         break;
 
       case 'editar':
-        _editarRuta(ruta);
         break;
 
       case 'cobrador':
-        _asignarCobrador(ruta);
         break;
 
       case 'estado':
@@ -500,32 +461,4 @@ class _RutaHomeState extends State<RutaHome> {
   void _verRuta(DatumREntity ruta) {
     // Navegar a detalle de ruta
   }
-
-  void _editarRuta(DatumREntity ruta) {
-    // Editar ruta
-  }
-
-  void _asignarCobrador(DatumREntity ruta) {
-    // Seleccionar cobrador
-  }
-
-  // ============================================================
-  // CREAR RUTA
-  // ============================================================
-}
-
-class RutaModel {
-  String nombre;
-  String descripcion;
-  String cobrador;
-  int clientes;
-  bool activa;
-
-  RutaModel({
-    required this.nombre,
-    required this.descripcion,
-    required this.cobrador,
-    required this.clientes,
-    required this.activa,
-  });
 }

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:personal/get_it.dart';
 import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
+import 'package:personal/src/domain/dto/crear_cliente_dto.dart';
 import 'package:personal/src/domain/dto/ruta_dto.dart';
 import 'package:personal/src/domain/entities/cobrador_entity.dart';
 import 'package:personal/src/domain/entities/detalle_ruta_entity.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
+import 'package:personal/src/domain/repository/cliente_repo.dart';
 import 'package:personal/src/domain/repository/ruta_repo.dart';
 import 'package:personal/src/domain/repository/usuario_repo.dart';
 import 'package:personal/src/ui/pages/rutas/views/ruta_home.dart';
@@ -20,6 +22,7 @@ class RutaCubit extends Cubit<RutaState> {
 
   final _cobradorRepo = sl<UsuarioRepository>();
   final _rutaRepo = sl<RutaRepo>();
+  final _clienteRepo = sl<ClienteRepository>();
 
   ///Constructor
   ///
@@ -36,6 +39,7 @@ class RutaCubit extends Cubit<RutaState> {
 
   final nombreRuta = TextEditingController();
   final descripcionRuta = TextEditingController();
+  final capital = TextEditingController();
 
   ///Eventos
   ///
@@ -52,7 +56,7 @@ class RutaCubit extends Cubit<RutaState> {
     bool e = false;
     if (nombreRuta.text.isNotEmpty &&
         descripcionRuta.text.isNotEmpty &&
-        state.cobrador != null) {
+        capital.text.isNotEmpty) {
       e = true;
     }
     emit(state.copyWith(enabled: e));
@@ -91,7 +95,8 @@ class RutaCubit extends Cubit<RutaState> {
       dto: RutaDto(
         nombre: nombreRuta.text,
         descripcion: descripcionRuta.text,
-        cobradorId: state.cobrador!.id,
+        cobradorId: state.cobrador?.id,
+        capital: int.parse(capital.text),
         habilitada: true,
       ),
     );
@@ -117,6 +122,25 @@ class RutaCubit extends Cubit<RutaState> {
     emit(state.copyWith(loading: false));
   }
 
+  void crearCliente(CrearClienteDto dto) async {
+    emit(state.copyWith(loadingBtn: true));
+    final r = await _clienteRepo.crear(dto: dto);
+    r.fold(
+      (l) {
+        AppDialogUtil.error(state.context, message: l.props[0].toString());
+      },
+      (r) {
+        AppDialogUtil.success(
+          state.context,
+          message: "Cliente creado con éxito.",
+        );
+        onEventChild(RutaHome());
+        listarRutas();
+      },
+    );
+    emit(state.copyWith(loadingBtn: false));
+  }
+
   void editarRuta(String id) async {
     emit(state.copyWith(loadingBtn: true));
     final r = await _rutaRepo.editar(
@@ -125,6 +149,7 @@ class RutaCubit extends Cubit<RutaState> {
         cobradorId: state.cobrador!.id,
         descripcion: descripcionRuta.text,
         nombre: nombreRuta.text,
+        capital: int.parse(capital.text),
       ),
     );
     r.fold(

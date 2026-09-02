@@ -13,21 +13,22 @@ class PrestamosHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PrestamoCubit, PrestamoState>(
       builder: (context, state) {
+        final prestamos = state.prestamos ?? [];
         return Column(
           children: [
             HeaderPView(),
 
-            Expanded(
-              child:  ListView(
-                padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
-                children: [
-                  SearPView(),
+            Visibility(
+              visible: !state.loading,
+              child: Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
+                  children: [
+                    SearPView(),
 
-                  const SizedBox(height: 18),
+                    const SizedBox(height: 18),
 
-                  Visibility(
-                    visible: state.loading,
-                    child: Row(
+                    Row(
                       children: [
                         Expanded(
                           child: Text(
@@ -44,26 +45,26 @@ class PrestamosHome extends StatelessWidget {
                         FilterButton(),
                       ],
                     ),
-                  ),
 
-                  ...state.prestamos!.map(
-                    (e) => Container(
-                      margin: EdgeInsets.only(top: 14),
-                      child: PrestamoCardView(
-                        client: e.cliente.nombres,
-                        document: 'CC ${e.cliente.cedula}',
-                        route: 'Ruta Norte',
-                        amount: '\$${e.deudaActual}',
-                        installment: '\$${e.valorCuota}',
-                        paid: 'Cobrar',
-                        id:e.id,
-                        status: 'Activo',
-                        statusColor: const Color(0xFF4164E8),
-                        statusBackground: const Color(0xFFEEF4FF),
+                    ...prestamos.map(
+                      (e) => Container(
+                        margin: EdgeInsets.only(top: 14),
+                        child: PrestamoCardView(
+                          client: e.cliente.nombres,
+                          document: 'CC ${e.cliente.cedula}',
+                          route: 'Ruta Norte',
+                          amount: '\$${e.deudaActual}',
+                          installment: '\$${e.valorCuota}',
+                          paid: 'Cobrar',
+                          id: e.id,
+                          status: 'Activo',
+                          statusColor: const Color(0xFF4164E8),
+                          statusBackground: const Color(0xFFEEF4FF),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],

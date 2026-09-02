@@ -3,8 +3,15 @@ class RutaDto {
   final String? descripcion;
   final String? cobradorId;
   final bool? habilitada;
+  final int? capital;
 
-  RutaDto({this.nombre, this.descripcion, this.cobradorId, this.habilitada});
+  RutaDto({
+    this.nombre,
+    this.descripcion,
+    this.cobradorId,
+    this.habilitada,
+    this.capital,
+  });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
@@ -19,6 +26,9 @@ class RutaDto {
     }
     if (habilitada != null) {
       data['habilitada'] = habilitada;
+    }
+    if (capital != null) {
+      data['capital'] = capital;
     }
     return data;
   }

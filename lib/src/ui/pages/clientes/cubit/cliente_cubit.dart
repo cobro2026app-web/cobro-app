@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/get_it.dart';
 import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/utils/app_dialog_util.dart';
-import 'package:personal/src/common/utils/update_util.dart';
 import 'package:personal/src/domain/dto/crear_cliente_dto.dart';
 import 'package:personal/src/domain/entities/cliente_entity.dart';
 import 'package:personal/src/domain/entities/ruta_entity.dart';
@@ -39,15 +38,6 @@ class ClienteCubit extends Cubit<ClienteState> {
   ///Variables
   ///
   ///
-  final nameTxt = TextEditingController();
-  final lastNameTxt = TextEditingController();
-  final ideTxt = TextEditingController();
-  final contactTxt = TextEditingController();
-  final whatsappTxt = TextEditingController();
-  final directionTxt = TextEditingController();
-  final addressDescriptionTxt = TextEditingController();
-  final barrioTxt = TextEditingController();
-  final observationTxt = TextEditingController();
 
   ///Eventos
   ///
@@ -63,19 +53,6 @@ class ClienteCubit extends Cubit<ClienteState> {
   ///Validaciones
   ///
   ///
-  void enabledBtn() {
-    final checkEnabled = [
-      nameTxt,
-      lastNameTxt,
-      ideTxt,
-      contactTxt,
-      whatsappTxt,
-      directionTxt,
-      barrioTxt,
-    ].every((text) => text.text.trim().isNotEmpty);
-    log("$checkEnabled");
-    emit(state.copyWith(btnEnabled: checkEnabled && state.ruta != null));
-  }
 
   ///Peticiones
   ///
@@ -96,22 +73,9 @@ class ClienteCubit extends Cubit<ClienteState> {
     emit(state.copyWith(loading: false));
   }
 
-  void crearCliente() async {
+  void crearCliente(CrearClienteDto dto) async {
     emit(state.copyWith(loadingBtn: true));
-    final r = await _clienteRepo.crear(
-      dto: CrearClienteDto(
-        rutaId: state.ruta!.id,
-        nombres: nameTxt.text.trim(),
-        apellidos: lastNameTxt.text.trim(),
-        cedula: ideTxt.text.trim(),
-        telefono: contactTxt.text.trim(),
-        whatsapp: whatsappTxt.text.trim(),
-        barrio: barrioTxt.text,
-        observacion: observationTxt.text,
-        direccion: addressDescriptionTxt.text.trim(),
-        descripcionDireccion: observationTxt.text.trim(),
-      ),
-    );
+    final r = await _clienteRepo.crear(dto: dto);
     r.fold(
       (l) {
         AppDialogUtil.error(state.context, message: l.props[0].toString());
@@ -141,63 +105,63 @@ class ClienteCubit extends Cubit<ClienteState> {
 
     final cliente = state.cliente;
 
-    if (cliente == null) {
-      emit(state.copyWith(loadingBtn: false));
-      return;
-    }
+    // if (cliente == null) {
+    //   emit(state.copyWith(loadingBtn: false));
+    //   return;
+    // }
 
-    final dto = CrearClienteDto(
-      rutaId: UpdateUtil.valorModificado(cliente.rutaId, state.ruta?.id),
+    // final dto = CrearClienteDto(
+    //   rutaId: UpdateUtil.valorModificado(cliente.rutaId, state.ruta?.id),
 
-      nombres: UpdateUtil.valorModificado(cliente.nombres, nameTxt.text.trim()),
+    //   nombres: UpdateUtil.valorModificado(cliente.nombres, nameTxt.text.trim()),
 
-      apellidos: UpdateUtil.valorModificado(
-        cliente.apellidos,
-        lastNameTxt.text.trim(),
-      ),
+    //   apellidos: UpdateUtil.valorModificado(
+    //     cliente.apellidos,
+    //     lastNameTxt.text.trim(),
+    //   ),
 
-      telefono: UpdateUtil.valorModificado(
-        cliente.telefono,
-        contactTxt.text.trim(),
-      ),
+    //   telefono: UpdateUtil.valorModificado(
+    //     cliente.telefono,
+    //     contactTxt.text.trim(),
+    //   ),
 
-      whatsapp: UpdateUtil.valorModificado(
-        cliente.whatsapp,
-        whatsappTxt.text.trim(),
-      ),
+    //   whatsapp: UpdateUtil.valorModificado(
+    //     cliente.whatsapp,
+    //     whatsappTxt.text.trim(),
+    //   ),
 
-      direccion: UpdateUtil.valorModificado(
-        cliente.direccion,
-        addressDescriptionTxt.text.trim(),
-      ),
+    //   direccion: UpdateUtil.valorModificado(
+    //     cliente.direccion,
+    //     addressDescriptionTxt.text.trim(),
+    //   ),
 
-      descripcionDireccion: UpdateUtil.valorModificado(
-        cliente.descripcionDireccion,
-        observationTxt.text.trim(),
-      ),
-      barrio: UpdateUtil.valorModificado(cliente.barrio, barrioTxt.text),
-      observacion: UpdateUtil.valorModificado(
-        cliente.observacion,
-        observationTxt.text,
-      ),
-    );
+    //   descripcionDireccion: UpdateUtil.valorModificado(
+    //     cliente.descripcionDireccion,
+    //     observationTxt.text.trim(),
+    //   ),
+    //   barrio: UpdateUtil.valorModificado(cliente.barrio, barrioTxt.text),
+    //   observacion: UpdateUtil.valorModificado(
+    //     cliente.observacion,
+    //     observationTxt.text,
+    //   ),
+    // );
 
-    final r = await _clienteRepo.editar(dto: dto, id: state.cliente!.id);
+    // final r = await _clienteRepo.editar(dto: dto, id: state.cliente!.id);
 
-    r.fold(
-      (l) {
-        AppDialogUtil.error(state.context, message: l.props[0].toString());
-      },
-      (r) {
-        AppDialogUtil.success(
-          state.context,
-          message: "Cliente editado con éxito.",
-        );
+    // r.fold(
+    //   (l) {
+    //     AppDialogUtil.error(state.context, message: l.props[0].toString());
+    //   },
+    //   (r) {
+    //     AppDialogUtil.success(
+    //       state.context,
+    //       message: "Cliente editado con éxito.",
+    //     );
 
-        listClientes();
-        setChild(ClientHome());
-      },
-    );
+    //     listClientes();
+    //     setChild(ClientHome());
+    //   },
+    // );
 
     emit(state.copyWith(loadingBtn: false));
   }
@@ -234,48 +198,6 @@ class ClienteCubit extends Cubit<ClienteState> {
   ///
   ///
   void clear() {
-    nameTxt.clear();
-    lastNameTxt.clear();
-    ideTxt.clear();
-    contactTxt.clear();
-    whatsappTxt.clear();
-    directionTxt.clear();
-    addressDescriptionTxt.clear();
-    barrioTxt.clear();
-    observationTxt.clear();
-
     emit(state.copyWith(btnEnabled: false, limpiarRuta: true));
-  }
-
-  void loadInfo() {
-    final c = state.cliente!;
-    nameTxt.text = c.nombres;
-    lastNameTxt.text = c.apellidos;
-    ideTxt.text = c.cedula;
-    contactTxt.text = c.telefono;
-    whatsappTxt.text = c.whatsapp;
-    directionTxt.text = c.direccion;
-    addressDescriptionTxt.text = c.descripcionDireccion;
-    barrioTxt.text = c.barrio;
-    observationTxt.text = c.observacion;
-    emit(
-      state.copyWith(
-        ruta: Shared.getRutas!.firstWhere((e) => e.id == c.rutaId),
-      ),
-    );
-  }
-
-  @override
-  Future<void> close() {
-    nameTxt.dispose();
-    lastNameTxt.dispose();
-    ideTxt.dispose();
-    contactTxt.dispose();
-    whatsappTxt.dispose();
-    directionTxt.dispose();
-    addressDescriptionTxt.dispose();
-    barrioTxt.dispose();
-    observationTxt.dispose();
-    return super.close();
   }
 }

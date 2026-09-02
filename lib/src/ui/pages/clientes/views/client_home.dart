@@ -14,6 +14,7 @@ class ClientHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ClienteCubit, ClienteState>(
       builder: (context, state) {
+        final clientes = state.clientes??[];
         return Column(
           children: [
             HeaderClienteView(),
@@ -53,7 +54,7 @@ class ClientHome extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 12),
-                  ...state.clientes!.map(
+                  ...clientes.map(
                     (c) => Container(
                       margin: EdgeInsets.only(top: 14),
                       child: ClientCardView(

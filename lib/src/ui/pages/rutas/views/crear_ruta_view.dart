@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/common/shared/shared.dart';
 import 'package:personal/src/common/theme/theme.dart';
@@ -34,92 +35,109 @@ class CrearRutaView extends StatelessWidget {
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
 
-                const Text(
-                  'Configura la ruta y asigna un cobrador.',
-                  style: TextStyle(color: Color(0xFF929BAB), fontSize: 14),
-                ),
-
-                const SizedBox(height: 20),
-
-                TextField(
-                  controller: c.nombreRuta,
-                  decoration: _inputDecoration(
-                    'Nombre de la ruta',
-                    Icons.route_outlined,
+                  const Text(
+                    'Configura la ruta y asigna un cobrador.',
+                    style: TextStyle(color: Color(0xFF929BAB), fontSize: 14),
                   ),
-                  onChanged: (e) {
-                    c.enabledBtn();
-                  },
-                ),
 
-                const SizedBox(height: 12),
+                  const SizedBox(height: 20),
 
-                TextField(
-                  controller: c.descripcionRuta,
-                  maxLines: 2,
-                  decoration: _inputDecoration(
-                    'Descripción / zona',
-                    Icons.location_on_outlined,
-                  ),
-                  onChanged: (e) {
-                    c.enabledBtn();
-                  },
-                ),
-
-                const SizedBox(height: 12),
-
-                GestureDetector(
-                  onTap: () async {
-                    final cobradores = Shared.getCobradores;
-
-                    final cobrador = await showSearch<DatumCEntity?>(
-                      context: context,
-                      delegate: CobradorSearchDelegate(cobradores ?? []),
-                    );
-
-                    if (cobrador != null) {
-                      c.onGetCobrador(cobrador);
-                      c.enabledBtn();
-                    }
-                  },
-                  child: InputDecorator(
+                  TextField(
+                    controller: c.nombreRuta,
                     decoration: _inputDecoration(
-                      'Cobrador',
-                      Icons.person_outline_rounded,
+                      'Nombre de la ruta',
+                      Icons.route_outlined,
                     ),
-                    child: Text(
-                      state.cobrador != null
-                          ? "${state.cobrador!.nombre} ${state.cobrador!.apellido}"
-                          : 'Seleccionar cobrador',
-                      style: const TextStyle(
-                        color: Color(0xFF394354),
-                        fontSize: 13,
+                    onChanged: (e) {
+                      c.enabledBtn();
+                    },
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  TextField(
+                    controller: c.descripcionRuta,
+                    maxLines: 2,
+                    decoration: _inputDecoration(
+                      'Descripción / zona',
+                      Icons.location_on_outlined,
+                    ),
+                    onChanged: (e) {
+                      c.enabledBtn();
+                    },
+                  ),
+
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: c.capital,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: _inputDecoration(
+                      'Capital de la ruta',
+                      Icons.attach_money_sharp,
+                    ),
+                    onChanged: (e) {
+                      c.enabledBtn();
+                    },
+                  ),
+                  const SizedBox(height: 12),
+
+                  GestureDetector(
+                    onTap: () async {
+                      final cobradores = Shared.getCobradores;
+
+                      final cobrador = await showSearch<DatumCEntity?>(
+                        context: context,
+                        delegate: CobradorSearchDelegate(cobradores ?? []),
+                      );
+
+                      if (cobrador != null) {
+                        c.onGetCobrador(cobrador);
+                        c.enabledBtn();
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: _inputDecoration(
+                        'Cobrador',
+                        Icons.person_outline_rounded,
+                      ),
+                      child: Text(
+                        state.cobrador != null
+                            ? "${state.cobrador!.nombre} ${state.cobrador!.apellido}"
+                            : 'Seleccionar cobrador',
+                        style: const TextStyle(
+                          color: Color(0xFF394354),
+                          fontSize: 13,
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                BtnWidget.btn(
-                  text: isEdit ? "Editar ruta" : "Crear ruta",
-                  enabled: state.enabled,
-                  loading: state.loadingBtn,
-                  onPressed: () {
-                    if (isEdit) {
-                      c.editarRuta(idRuta!);
-                    } else {
-                      c.crearRuta();
-                    }
-                  },
-                ),
-              ],
+                  BtnWidget.btn(
+                    text: isEdit ? "Editar ruta" : "Crear ruta",
+                    enabled: state.enabled,
+                    loading: state.loadingBtn,
+                    backgroundColor: AppTheme.primaryColor,
+                    foregroundColor: Colors.white,
+                    onPressed: () {
+                      if (isEdit) {
+                        c.editarRuta(idRuta!);
+                      } else {
+                        c.crearRuta();
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

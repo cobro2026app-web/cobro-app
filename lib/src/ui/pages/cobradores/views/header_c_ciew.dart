@@ -16,6 +16,7 @@ class HeaderCCiew extends StatelessWidget {
     return BlocBuilder<CobradorCubit, CobradorState>(
       builder: (context, state) {
         final c = context.read<CobradorCubit>();
+        final cobradores = state.cobradores ??[];
         return HeaderWidget(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +70,7 @@ class HeaderCCiew extends StatelessWidget {
               Row(
                 children: [
                   _headerMetric(
-                    value: '${state.cobradores!.length}',
+                    value: '${cobradores.length}',
                     label: 'Total',
                   ),
 
@@ -77,7 +78,7 @@ class HeaderCCiew extends StatelessWidget {
 
                   _headerMetric(
                     value:
-                        '${state.cobradores!.where((e) => e.estado == "ACTIVO").length}',
+                        '${cobradores.where((e) => e.estado == "ACTIVO").length}',
                     label: 'Activos',
                   ),
 

@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal/src/common/theme/theme.dart';
 import 'package:personal/src/ui/pages/config/config_page.dart';
+import 'package:personal/src/ui/pages/home/cubit/home_cubit.dart';
 import 'package:personal/src/ui/pages/rutas/ruta_page.dart';
 
 class DrawerHome extends StatelessWidget {
@@ -48,9 +52,7 @@ class DrawerHome extends StatelessWidget {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const RutaPage(),
-                        ),
+                        MaterialPageRoute(builder: (_) => const RutaPage()),
                       );
                     },
                   ),

@@ -162,7 +162,6 @@ class _RutaDetalleViewState extends State<RutaDetalleView> {
                       widget.ruta.nombre,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 17,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -175,10 +174,7 @@ class _RutaDetalleViewState extends State<RutaDetalleView> {
                           : widget.ruta.descripcion,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 11,
-                      ),
+                      style: const TextStyle(color: Colors.white70),
                     ),
                   ],
                 ),
@@ -241,10 +237,7 @@ class _RutaDetalleViewState extends State<RutaDetalleView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(color: Colors.white70,),
-                ),
+                Text(title, style: const TextStyle(color: Colors.white70)),
 
                 const SizedBox(height: 2),
 

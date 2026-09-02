@@ -19,7 +19,7 @@ class DatumRModel extends DatumREntity {
     required super.nombre,
     required super.descripcion,
     required super.habilitada,
-     super.cobrador,
+    super.cobrador,
     required super.cantidadClientes,
     required super.createdAt,
     required super.updatedAt,
@@ -30,7 +30,9 @@ class DatumRModel extends DatumREntity {
     nombre: json["nombre"],
     descripcion: json["descripcion"],
     habilitada: json["habilitada"],
-    cobrador: DatumCModel.fromJson(json["cobrador"]),
+    cobrador: json["cobrador"] == null
+        ? DatumCModel.fromJson({})
+        : DatumCModel.fromJson(json["cobrador"]),
     cantidadClientes: json["cantidadClientes"],
     createdAt: DateTime.parse(json["createdAt"]),
     updatedAt: DateTime.parse(json["updatedAt"]),

@@ -58,7 +58,7 @@ class ClienteDetalleView extends StatelessWidget {
                     IconButton(
                       onPressed: () {
                         c.clear();
-                        c.loadInfo();
+
                         c.setChild(CreateClientView(isEdit: true));
                       },
                       icon: Icon(
@@ -178,7 +178,6 @@ class ClienteDetalleView extends StatelessWidget {
                   );
                 },
               ),
-              
             ],
           ),
         ],
